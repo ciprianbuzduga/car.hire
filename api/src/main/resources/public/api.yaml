@@ -3,7 +3,7 @@ info:
   title: Car Hire API
   version: 0.1.0
   contact:
-    name: Your name here
+    name: Ciprian Buzduga
   description: Car Hire API
 servers:
   - url: http://localhost:{port}
@@ -37,10 +37,492 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/ServerError'
+
+  /users:
+    get:
+      tags:
+        - user
+      summary: Return a paginated list with the users
+      description: Return a paginated list with the users
+      operationId: getUsers
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: The number of page used in pagination
+          required: false
+        - in: query
+          name: size
+          schema:
+            type: integer
+            minimum: 1
+            default: 20
+          required: false
+          description: The number of users retrived from current page
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: 'username,asc'
+          required: false  
+          description: A pair consists from property name and type of sorting splits by a comma
+      responses:
+        '200':
+          $ref: '#/components/responses/PageUsers'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    post:
+      tags:
+        - user
+      summary: Create a user
+      description: Create a new user
+      operationId: createUser
+      requestBody:
+        description: Payload of user, id attribute is ignored
+        required : true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDTO'
+      responses:
+        '201':
+          description: A new user was created with success
+          headers:
+            'Location':
+              $ref: '#/components/headers/UserLocation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /users/{id}:
+    get:
+      tags:
+        - user
+      summary: Return a user by id.
+      description: Return a user by id. The id is an integer.
+      operationId: getUser
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: The id of user
+          required: true
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/UserDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    delete:
+      tags:
+        - user
+      summary: Delete a user by id
+      description: Delete a user by id. The id is an integer.
+      operationId: deleteUser
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: The id of user
+          required: true
+      responses:
+        '204':
+          description: Delete a user with success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    patch:
+      tags:
+        - user
+      summary: Update user
+      description: Update a user’s details using a PATCH request
+      operationId: updateUser
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: The id of user
+          required: true
+      requestBody:
+        $ref: '#/components/requestBodies/PatchBody'
+      responses:
+        '204':
+          description: Update a user with success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /cars:
+    post:
+      tags:
+        - car
+      summary: Create a car
+      description: Add a car to the fleet
+      operationId: addCar
+      requestBody:
+        description: Payload of car, id attribute is ignored
+        required : true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarDTO'
+      responses:
+        '201':
+          description: A new car was added with success to the fleet
+          headers:
+            'Location':
+              $ref: '#/components/headers/CarLocation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    get:
+      tags:
+        - car
+      summary: Return a paginated list with the cars
+      description: Return a paginated list with the cars
+      operationId: getCars
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: The number of page used in pagination
+          required: false
+        - in: query
+          name: size
+          schema:
+            type: integer
+            minimum: 1
+            default: 20
+          required: false
+          description: The number of cars retrived from current page
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: 'year,desc'
+          required: false  
+          description: A pair consists from property name and type of sorting splits by a comma
+        - in: query
+          name: status
+          schema:
+            type: string
+          required: false  
+          description: A value to filter cars by status
+      responses:
+        '200':
+          $ref: '#/components/responses/PageCars'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /cars/{id}:
+    get:
+      tags:
+        - car
+      summary: Return a car by id.
+      description: Return a car by id. The id is an integer.
+      operationId: getCar
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: The id of car
+          required: true
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/CarDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    delete:
+      tags:
+        - car
+      summary: Delete a car by id
+      description: Delete a car by id. The id is an integer.
+      operationId: deleteCar
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: The id of car
+          required: true
+      responses:
+        '204':
+          description: Delete a car with success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    patch:
+      tags:
+        - car
+      summary: Update car
+      description: Update a car’s details using a PATCH request
+      operationId: updateCar
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: The id of car
+          required: true
+      requestBody:
+        $ref: '#/components/requestBodies/PatchBody'
+      responses:
+        '204':
+          description: Update a car with success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /rentals:
+    post:
+      tags:
+        - rental
+      summary: Create a reservation
+      description: Create a reservation
+      operationId: createRental
+      requestBody:
+        description: Payload of rental, id attribute is ignored
+        required : true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RentalDTO'
+      responses:
+        '201':
+          description: A new rental was added with success
+          headers:
+            'Location':
+              $ref: '#/components/headers/RentalLocation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    get:
+      tags:
+        - rental
+      summary: Return a paginated list with the rentals
+      description: Return a paginated list with the rentals
+      operationId: getRentals
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: The number of page used in pagination
+          required: false
+        - in: query
+          name: size
+          schema:
+            type: integer
+            minimum: 1
+            default: 20
+          required: false
+          description: The number of rentals retrived from current page
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: 'startDate,desc'
+          required: false  
+          description: A pair consists from property name and type of sorting splits by a comma
+        - in: query
+          name: userId
+          schema:
+            type: integer
+          required: false  
+          description: A value to filter rentals by user id
+        - in: query
+          name: carId
+          schema:
+            type: integer
+          required: false  
+          description: A value to filter rentals by car id
+        - in: query
+          name: status
+          schema:
+            type: string
+          required: false  
+          description: A value to filter rentals by status
+      responses:
+        '200':
+          $ref: '#/components/responses/PageRentals'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /rentals/{id}:
+    get:
+      tags:
+        - rental
+      summary: Return a reservation by id.
+      description: Return a reservation by id. The id is an integer.
+      operationId: getRental
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: The id of rental
+          required: true
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/RentalDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    delete:
+      tags:
+        - rental
+      summary: Cancel a rental by id
+      description: Cancel a rental by id. The id is an integer.
+      operationId: cancelRental
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: The id of rental
+          required: true
+      responses:
+        '204':
+          description: Cancel a rental with success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    patch:
+      tags:
+        - rental
+      summary: Update a reservation
+      description: Update a reservation’s details using a PATCH request
+      operationId: updateRental
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: The id of rental
+          required: true
+      requestBody:
+        $ref: '#/components/requestBodies/PatchBody'
+      responses:
+        '204':
+          description: Update a rental with success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
 components:
+  requestBodies:
+    PatchBody:
+      description: A message in JsonPatch format
+      required: true
+      content:
+        application/json-patch+json:
+          schema:
+            $ref: '#/components/schemas/PatchBody'
+
   responses:
     Unauthorized:
       description: unauthorized
+
     BadRequest:
       description: bad request
       content:
@@ -49,13 +531,220 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/ValidationDTO'
+
+    ResourceNotFoundError:
+      description: resource not found error
     ServerError:
       description: internal server error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorDTO'
+
+    PageUsers:
+      description: A page with users retrived from getUsers call
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PageUsers'
+
+    PageCars:
+      description: A page with cars retrived from getCars call
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PageCars'
+
+    PageRentals:
+      description: A page with rentals retrived from getRentals call
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PageRentals'
+
+  headers:
+    UserLocation:
+      schema:
+        type: string
+      description: The url for access a user by id
+
+    CarLocation:
+      schema:
+        type: string
+      description: The url for access a car by id
+
+    RentalLocation:
+      schema:
+        type: string
+      description: The url for access a rental by id
+
   schemas:
+    PatchBody:
+      type: array
+      items:
+        $ref: '#/components/schemas/PatchDocument'
+
+    PatchDocument:
+      type: object
+      description: A JSONPatch document as defined by RFC 6902.
+      required:
+       - 'op'
+       - 'path'
+       - 'value'
+      properties: 
+       op: 
+        type: string 
+        description: The operation to be performed 
+        enum:
+         - 'add'
+         - 'remove'
+         - 'replace'
+         - 'move'
+         - 'copy'
+         - 'test'
+       path: 
+        type: string 
+        description: A JSON-Pointer 
+       value: 
+        type: object 
+        description: The value to be used within the operations.
+       from: 
+        type: string 
+        description: A string containing a JSON Pointer value.
+
+    PageUsers:
+      type: object
+      properties:
+        totalNoUsers:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        currentPage:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserDTO'
+
+    PageCars:
+      type: object
+      properties:
+        totalNoCars:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        currentPage:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        cars:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarDTO'
+
+    PageRentals:
+      type: object
+      properties:
+        totalNoRentals:
+          type: integer
+          format: int32
+        totalPages:
+          type: integer
+          format: int32
+        currentPage:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        rentals:
+          type: array
+          items:
+            $ref: '#/components/schemas/RentalDTO'
+
+    UserDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        email:
+          type: string
+          format: email
+          pattern: '^(.+)@(.+)$'
+        password:
+          type: string
+          format: password
+        username:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        country:
+          type: string
+        driverLicenseNo:
+          type: string
+        status:
+          type: string
+          enum: [ACTIVE, DELETED]
+
+    CarDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        make:
+          type: string
+        model:
+          type: string
+        year:
+          type: integer
+          format: int32
+        mileage:
+          type: integer
+          format: int32
+        fuel:
+          type: string
+        carClazz:
+          type: string
+        status:
+          type: string
+          enum: [ACTIVE, DELETED]
+
+    RentalDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        userId:
+          type: integer
+          format: int32
+        carId:
+          type: integer
+          format: int32
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [ACTIVE, CANCELLED]
+
     ValidationDTO:
       type: object
       properties:
@@ -65,6 +754,7 @@ components:
           type: string
         description:
           type: string
+
     ErrorDTO:
       type: object
       properties:
@@ -72,6 +762,7 @@ components:
           type: string
         message:
           type: string
+
     SampleDTO:
       type: object
       properties:
