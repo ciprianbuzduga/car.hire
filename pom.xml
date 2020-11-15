@@ -32,6 +32,7 @@
         <springfox.version>3.0.0</springfox.version>
         <databind.nullable.version>0.2.1</databind.nullable.version>
         <spring-openapi.version>1.4.8</spring-openapi.version>
+        <spring-boot-starter-validation.version>2.3.5.RELEASE</spring-boot-starter-validation.version>
     </properties>
 
     <packaging>pom</packaging>
