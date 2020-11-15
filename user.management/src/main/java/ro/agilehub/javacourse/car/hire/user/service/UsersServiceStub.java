@@ -2,6 +2,7 @@ package ro.agilehub.javacourse.car.hire.user.service;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
@@ -85,7 +86,8 @@ public class UsersServiceStub implements UsersService {
 					totalNoUsers : limit));
 		}
 
-		List<UserDTO> finalList = listUsers.get(page);
+		List<UserDTO> finalList = listUsers.size() > 0 ? listUsers.get(page)
+				: Collections.emptyList();
 		finalList.forEach(u -> u.setPassword(null));
 
 		PageUsers pageUsers = new PageUsers();

@@ -2,6 +2,7 @@ package ro.agilehub.javacourse.car.hire.fleet.service;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
@@ -47,12 +48,12 @@ public class CarsServiceStub implements CarsService {
 	@Override
 	public PageCars findAll(Integer page, Integer size, String sort,
 			String status) {
-		StatusEnum statusObj = StatusEnum.fromValue(status);
 		List<CarDTO> cars = null;
-		if(statusObj != null)
+		if(status != null) {
+			StatusEnum statusObj = StatusEnum.fromValue(status);
 			cars = carStubs.stream().filter(c -> statusObj.equals(c.getStatus()))
 				.collect(Collectors.toList());
-		else
+		} else
 			cars = carStubs;
 
 		int totalNoCars = carStubs.size();
@@ -63,7 +64,8 @@ public class CarsServiceStub implements CarsService {
 					totalNoCars : limit));
 		}
 
-		List<CarDTO> finalList = listCars.get(page);
+		List<CarDTO> finalList = listCars.size() > 0 ? listCars.get(page)
+				: Collections.emptyList();
 
 		PageCars pageCars = new PageCars();
 		pageCars.setCurrentPage(page);
