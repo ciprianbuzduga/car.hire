@@ -2,13 +2,10 @@ package ro.agilehub.javacourse.car.hire.user.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import ro.agilehub.javacourse.car.hire.api.model.PageUsers;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.api.model.UserDTO;
 
-@Service
 public interface UsersService {
 
 	boolean addUser(UserDTO userDTO);
