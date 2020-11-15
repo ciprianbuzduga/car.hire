@@ -86,7 +86,7 @@ public class UsersServiceStub implements UsersService {
 					totalNoUsers : limit));
 		}
 
-		List<UserDTO> finalList = listUsers.size() > 0 ? listUsers.get(page)
+		List<UserDTO> finalList = listUsers.size() > page ? listUsers.get(page)
 				: Collections.emptyList();
 		finalList.forEach(u -> u.setPassword(null));
 

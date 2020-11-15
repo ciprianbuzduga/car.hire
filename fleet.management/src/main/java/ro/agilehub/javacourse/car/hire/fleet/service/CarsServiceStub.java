@@ -64,7 +64,7 @@ public class CarsServiceStub implements CarsService {
 					totalNoCars : limit));
 		}
 
-		List<CarDTO> finalList = listCars.size() > 0 ? listCars.get(page)
+		List<CarDTO> finalList = listCars.size() > page ? listCars.get(page)
 				: Collections.emptyList();
 
 		PageCars pageCars = new PageCars();
