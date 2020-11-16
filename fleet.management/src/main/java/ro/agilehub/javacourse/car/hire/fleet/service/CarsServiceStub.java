@@ -100,16 +100,16 @@ public class CarsServiceStub implements CarsService {
 			throw new PatchException("Path is invalid! An expression "
 					+ "'/<carAttr>' is accepted.");
 
-		String userAttribute = path.replace("/", "");
+		String carAttribute = path.replace("/", "");
 		Object value = patch.getValue();
 
 		try {
-			if("id".equals(userAttribute))
+			if("id".equals(carAttribute))
 				throw new PatchException("Invalid attribute 'id' for update.");
-			if("status".equals(userAttribute))
+			if("status".equals(carAttribute))
 				value = StatusEnum.fromValue((String) value);
 
-			Field field = car.getClass().getDeclaredField(userAttribute);
+			Field field = car.getClass().getDeclaredField(carAttribute);
 			field.setAccessible(true);
 			field.set(car, value);
 			return true;
@@ -123,7 +123,7 @@ public class CarsServiceStub implements CarsService {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (ClassCastException e) {
-			throw new PatchException(e.getMessage(), userAttribute);
+			throw new PatchException(e.getMessage(), carAttribute);
 		}
 		return false;
 	}

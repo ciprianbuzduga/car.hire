@@ -4,6 +4,7 @@ import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 import java.util.NoSuchElementException;
 
+import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -77,6 +78,14 @@ public class RestControllerExceptionHandler extends ResponseEntityExceptionHandl
 			PatchException ex, WebRequest request) {
 		String error = ex.getMessage();
 		return createBadRequestEntity(CODE_BAD_REQUEST, error, ex.getField());
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleConversionNotSupported(
+			ConversionNotSupportedException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		String error = ex.getMessage();
+		return createBadRequestEntity(CODE_BAD_REQUEST, error, ex.getPropertyName());
 	}
 
 	protected ResponseEntity<Object> createBadRequestEntity(String code, String error,
