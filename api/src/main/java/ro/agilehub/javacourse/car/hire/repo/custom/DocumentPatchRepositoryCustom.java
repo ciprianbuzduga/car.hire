@@ -1,4 +1,4 @@
-package ro.agilehub.javacourse.car.hire.repo;
+package ro.agilehub.javacourse.car.hire.repo.custom;
 
 import java.util.List;
 

@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import ro.agilehub.javacourse.car.hire.rental.document.RentalDoc;
-import ro.agilehub.javacourse.car.hire.repo.DocumentPatchRepositoryCustom;
+import ro.agilehub.javacourse.car.hire.repo.custom.DocumentPatchRepositoryCustom;
 
 public interface RentalRepository extends MongoRepository<RentalDoc, String>,
 	DocumentPatchRepositoryCustom {

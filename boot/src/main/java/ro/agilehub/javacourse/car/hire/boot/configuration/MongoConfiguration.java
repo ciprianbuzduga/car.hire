@@ -1,4 +1,4 @@
-package ro.agilehub.javacourse.car.hire.configuration;
+package ro.agilehub.javacourse.car.hire.boot.configuration;
 
 import java.util.List;
 
