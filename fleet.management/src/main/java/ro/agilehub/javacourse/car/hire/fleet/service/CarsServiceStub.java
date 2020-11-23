@@ -9,37 +9,50 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import ro.agilehub.javacourse.car.hire.api.exception.PatchException;
-import ro.agilehub.javacourse.car.hire.api.model.CarDTO;
-import ro.agilehub.javacourse.car.hire.api.model.CarDTO.StatusEnum;
+import ro.agilehub.javacourse.car.hire.api.model.CarRequestDTO;
+import ro.agilehub.javacourse.car.hire.api.model.CarResponseDTO;
+import ro.agilehub.javacourse.car.hire.api.model.CarStatusDTO;
 import ro.agilehub.javacourse.car.hire.api.model.PageCars;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument.OpEnum;
+import ro.agilehub.javacourse.car.hire.fleet.document.CarDoc;
 
+@Qualifier("carsServiceStub")
 @Service
 public class CarsServiceStub implements CarsService {
 
-	private final List<CarDTO> carStubs = new ArrayList<>();
+	private final List<CarResponseDTO> carStubs = new ArrayList<>();
 
 	@Override
-	public boolean addCar(CarDTO carDTO) {
+	public String addCar(CarRequestDTO carDTO) {
 		int nextId = carStubs.size() + 1;
-		carDTO.setId(nextId);
-		return carStubs.add(carDTO);
+		CarResponseDTO car = new CarResponseDTO();
+		car.setClazzCode(carDTO.getClazzCode());
+		car.setFuel(carDTO.getFuel());
+		car.setId(String.valueOf(nextId));
+		car.setMake(carDTO.getMake());
+		car.setMileage(carDTO.getMileage());
+		car.setModel(carDTO.getModel());
+		car.setStatus(CarStatusDTO.ACTIVE);
+		car.setYear(carDTO.getYear());
+		carStubs.add(car);
+		return car.getId();
 	}
 
 	@Override
-	public boolean deleteCar(Integer id) {
-		CarDTO car = getCar(id);
-		car.setStatus(StatusEnum.DELETED);
+	public boolean deleteCar(String id) {
+		CarResponseDTO car = getCar(id);
+		car.setStatus(CarStatusDTO.DELETED);
 		//Should I remove from all cars?
 		return carStubs.remove(car);
 	}
 
 	@Override
-	public CarDTO getCar(Integer id) {
+	public CarResponseDTO getCar(String id) {
 		return carStubs.stream().filter(u -> u.getId().equals(id))
 				.findFirst().orElseThrow(() ->
 				new NoSuchElementException("No car found with id " + id));
@@ -48,50 +61,50 @@ public class CarsServiceStub implements CarsService {
 	@Override
 	public PageCars findAll(Integer page, Integer size, String sort,
 			String status) {
-		List<CarDTO> cars = null;
+		List<CarResponseDTO> cars = null;
 		if(status != null) {
-			StatusEnum statusObj = StatusEnum.fromValue(status);
+			CarStatusDTO statusObj = CarStatusDTO.fromValue(status);
 			cars = carStubs.stream().filter(c -> statusObj.equals(c.getStatus()))
 				.collect(Collectors.toList());
 		} else
 			cars = carStubs;
 
 		int totalNoCars = carStubs.size();
-		List<List<CarDTO>> listCars = new ArrayList<>();
+		List<List<CarResponseDTO>> listCars = new ArrayList<>();
 		for(int i = 0; i < totalNoCars; i = i + size) {
 			int limit = i + size;
 			listCars.add(cars.subList(i, limit > totalNoCars ?
 					totalNoCars : limit));
 		}
 
-		List<CarDTO> finalList = listCars.size() > page ? listCars.get(page)
+		List<CarResponseDTO> finalList = listCars.size() > page ? listCars.get(page)
 				: Collections.emptyList();
 
 		PageCars pageCars = new PageCars();
 		pageCars.setCurrentPage(page);
 		pageCars.setPageSize(finalList.size());
-		pageCars.setTotalNoCars(totalNoCars);
+		pageCars.setTotalNoRecords(totalNoCars);
 		pageCars.setTotalPages(listCars.size());
 		pageCars.setCars(finalList);
 		return pageCars;
 	}
 
 	@Override
-	public boolean updateCar(Integer id, List<PatchDocument> patchDocuments) {
+	public boolean updateCar(String id, List<PatchDocument> patchDocuments) {
 		PatchDocument patchInvalid = patchDocuments.stream()
 				.filter(p -> p != null && !OpEnum.REPLACE.equals(p.getOp()))
 				.findFirst().orElse(null);
 		if(patchInvalid != null)
 			throw new PatchException("Only 'replace' operation is supported at the moment!");
 
-		CarDTO car = getCar(id);
+		CarResponseDTO car = getCar(id);
 		for(PatchDocument patch : patchDocuments)
 			if(!applyPatch(patch, car))
 				return false;
 		return true;
 	}
 
-	private boolean applyPatch(PatchDocument patch, CarDTO car) {
+	private boolean applyPatch(PatchDocument patch, CarResponseDTO car) {
 		String path = patch.getPath();
 
 		Pattern pattern = Pattern.compile("/\\w+");
@@ -107,7 +120,7 @@ public class CarsServiceStub implements CarsService {
 			if("id".equals(carAttribute))
 				throw new PatchException("Invalid attribute 'id' for update.");
 			if("status".equals(carAttribute))
-				value = StatusEnum.fromValue((String) value);
+				value = CarStatusDTO.fromValue((String) value);
 
 			Field field = car.getClass().getDeclaredField(carAttribute);
 			field.setAccessible(true);
@@ -126,6 +139,11 @@ public class CarsServiceStub implements CarsService {
 			throw new PatchException(e.getMessage(), carAttribute);
 		}
 		return false;
+	}
+
+	@Override
+	public CarDoc getCarDoc(String carId) {
+		return null;
 	}
 
 }

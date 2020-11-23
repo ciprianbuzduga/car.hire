@@ -5,13 +5,15 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerErrorException;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import ro.agilehub.javacourse.car.hire.api.model.CarDTO;
+import ro.agilehub.javacourse.car.hire.api.model.CarRequestDTO;
+import ro.agilehub.javacourse.car.hire.api.model.CarResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.model.PageCars;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.api.specification.CarsApi;
@@ -22,15 +24,14 @@ public class CarsController implements CarsApi {
 
 	private final CarsService carsService;
 
-	public CarsController(CarsService carsService) {
+	public CarsController(@Qualifier("carsService") CarsService carsService) {
 		this.carsService = carsService;
 	}
 
 	@Override
-	public ResponseEntity<Void> addCar(@Valid CarDTO carDTO) {
-		boolean added = carsService.addCar(carDTO);
-		if(added) {
-			Integer newId = carDTO.getId();
+	public ResponseEntity<Void> addCar(@Valid CarRequestDTO carDTO) {
+		String newId = carsService.addCar(carDTO);
+		if(newId != null) {
 			UriComponents uriComponents = UriComponentsBuilder.newInstance()
 					.scheme("http").host("localhost").port(8080)
 					.path("/cars/{id}").buildAndExpand(newId);
@@ -41,7 +42,7 @@ public class CarsController implements CarsApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> deleteCar(Integer id) {
+	public ResponseEntity<Void> deleteCar(String id) {
 		boolean deleted = carsService.deleteCar(id);
 		if(deleted) {
 			return ResponseEntity.noContent().build();
@@ -51,8 +52,8 @@ public class CarsController implements CarsApi {
 	}
 
 	@Override
-	public ResponseEntity<CarDTO> getCar(Integer id) {
-		CarDTO car = carsService.getCar(id);
+	public ResponseEntity<CarResponseDTO> getCar(String id) {
+		CarResponseDTO car = carsService.getCar(id);
 		return ResponseEntity.ok(car);
 	}
 
@@ -65,7 +66,7 @@ public class CarsController implements CarsApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> updateCar(Integer id,
+	public ResponseEntity<Void> updateCar(String id,
 			@Valid List<PatchDocument> patchDocument) {
 		boolean update = carsService.updateCar(id, patchDocument);
 		if(update)

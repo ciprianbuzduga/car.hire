@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerErrorException;
@@ -13,7 +14,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import ro.agilehub.javacourse.car.hire.api.model.PageRentals;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
-import ro.agilehub.javacourse.car.hire.api.model.RentalDTO;
+import ro.agilehub.javacourse.car.hire.api.model.RentalRequestDTO;
+import ro.agilehub.javacourse.car.hire.api.model.RentalResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.specification.RentalsApi;
 import ro.agilehub.javacourse.car.hire.rental.service.RentalService;
 
@@ -22,13 +24,13 @@ public class RentalController implements RentalsApi {
 
 	private final RentalService rentalService;
 
-	public RentalController(RentalService rentalService) {
+	public RentalController(@Qualifier("rentalService") RentalService rentalService) {
 		this.rentalService = rentalService;
 	}
 
 	@Override
-	public ResponseEntity<Void> cancelRental(Integer id) {
-		boolean deleted = rentalService.cancelRental(id);
+	public ResponseEntity<Void> deleteRental(String id) {
+		boolean deleted = rentalService.deleteRental(id);
 		if(deleted) {
 			return ResponseEntity.noContent().build();
 		} else 
@@ -37,10 +39,9 @@ public class RentalController implements RentalsApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> createRental(@Valid RentalDTO rentalDTO) {
-		boolean added = rentalService.createRental(rentalDTO);
-		if(added) {
-			Integer newId = rentalDTO.getId();
+	public ResponseEntity<Void> createRental(@Valid RentalRequestDTO rentalDTO) {
+		String newId = rentalService.createRental(rentalDTO);
+		if(newId != null) {
 			UriComponents uriComponents = UriComponentsBuilder.newInstance()
 					.scheme("http").host("localhost").port(8080)
 					.path("/rentals/{id}").buildAndExpand(newId);
@@ -51,15 +52,15 @@ public class RentalController implements RentalsApi {
 	}
 
 	@Override
-	public ResponseEntity<RentalDTO> getRental(Integer id) {
-		RentalDTO rental = rentalService.getRental(id);
+	public ResponseEntity<RentalResponseDTO> getRental(String id) {
+		RentalResponseDTO rental = rentalService.getRental(id);
 		return ResponseEntity.ok(rental);
 	}
 
 	@Override
 	public ResponseEntity<PageRentals> getRentals(@Min(0) @Valid Integer page,
 			@Min(1) @Valid Integer size,
-			@Valid String sort, @Valid Integer userId, @Valid Integer carId,
+			@Valid String sort, @Valid String userId, @Valid String carId,
 			@Valid String status) {
 		PageRentals pageRentals = rentalService.findAll(page, size, sort, userId,
 				carId, status);
@@ -67,7 +68,7 @@ public class RentalController implements RentalsApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> updateRental(Integer id, @Valid List<PatchDocument> patchDocument) {
+	public ResponseEntity<Void> updateRental(String id, @Valid List<PatchDocument> patchDocument) {
 		boolean update = rentalService.updateRental(id, patchDocument);
 		if(update)
 			return ResponseEntity.noContent().build();

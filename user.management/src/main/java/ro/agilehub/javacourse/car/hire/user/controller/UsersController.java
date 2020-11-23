@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerErrorException;
@@ -13,7 +14,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import ro.agilehub.javacourse.car.hire.api.model.PageUsers;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
-import ro.agilehub.javacourse.car.hire.api.model.UserDTO;
+import ro.agilehub.javacourse.car.hire.api.model.UserRequestDTO;
+import ro.agilehub.javacourse.car.hire.api.model.UserResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.specification.UsersApi;
 import ro.agilehub.javacourse.car.hire.user.service.UsersService;
 
@@ -22,15 +24,14 @@ public class UsersController implements UsersApi {
 
 	private final UsersService usersService;
 
-	public UsersController(UsersService usersService) {
+	public UsersController(@Qualifier("usersService") UsersService usersService) {
 		this.usersService = usersService;
 	}
 
 	@Override
-	public ResponseEntity<Void> createUser(@Valid UserDTO userDTO) {
-		boolean added = usersService.addUser(userDTO);
-		if(added) {
-			Integer newId = userDTO.getId();
+	public ResponseEntity<Void> createUser(@Valid UserRequestDTO userDTO) {
+		String newId = usersService.addUser(userDTO);
+		if(newId != null) {
 			UriComponents uriComponents = UriComponentsBuilder.newInstance()
 					.scheme("http").host("localhost").port(8080)
 					.path("/users/{id}").buildAndExpand(newId);
@@ -41,7 +42,7 @@ public class UsersController implements UsersApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> deleteUser(Integer id) {
+	public ResponseEntity<Void> deleteUser(String id) {
 		boolean removed = usersService.removeUserById(id);
 		if(removed) {
 			return ResponseEntity.noContent().build();
@@ -51,8 +52,8 @@ public class UsersController implements UsersApi {
 	}
 
 	@Override
-	public ResponseEntity<UserDTO> getUser(Integer id) {
-		UserDTO user = usersService.getUser(id);
+	public ResponseEntity<UserResponseDTO> getUser(String id) {
+		UserResponseDTO user = usersService.getUser(id);
 		user.setPassword(null);
 		return ResponseEntity.ok(user);
 	}
@@ -66,7 +67,8 @@ public class UsersController implements UsersApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> updateUser(Integer id, @Valid List<PatchDocument> patchDocument) {
+	public ResponseEntity<Void> updateUser(String id,
+			@Valid List<PatchDocument> patchDocument) {
 		boolean update = usersService.updateUser(id, patchDocument);
 		if(update)
 			return ResponseEntity.noContent().build();

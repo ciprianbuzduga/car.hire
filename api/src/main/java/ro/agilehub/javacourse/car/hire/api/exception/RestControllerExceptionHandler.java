@@ -5,10 +5,12 @@ import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.ConversionNotSupportedException;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ServerErrorException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 
 import ro.agilehub.javacourse.car.hire.api.model.ErrorDTO;
 import ro.agilehub.javacourse.car.hire.api.model.ValidationDTO;
@@ -86,6 +90,21 @@ public class RestControllerExceptionHandler extends ResponseEntityExceptionHandl
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		String error = ex.getMessage();
 		return createBadRequestEntity(CODE_BAD_REQUEST, error, ex.getPropertyName());
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		String error = ex.getMessage();
+		return createBadRequestEntity(CODE_BAD_REQUEST, error, null);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(
+			HttpMessageNotReadableException ex, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
+		String error = ex.getMessage();
+		return createBadRequestEntity(CODE_BAD_REQUEST, error, null);
 	}
 
 	protected ResponseEntity<Object> createBadRequestEntity(String code, String error,

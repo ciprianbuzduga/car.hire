@@ -4,18 +4,36 @@ import java.util.List;
 
 import ro.agilehub.javacourse.car.hire.api.model.PageUsers;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
-import ro.agilehub.javacourse.car.hire.api.model.UserDTO;
+import ro.agilehub.javacourse.car.hire.api.model.UserRequestDTO;
+import ro.agilehub.javacourse.car.hire.api.model.UserResponseDTO;
+import ro.agilehub.javacourse.car.hire.user.document.UserDoc;
 
 public interface UsersService {
 
-	boolean addUser(UserDTO userDTO);
+	String addUser(UserRequestDTO userDTO);
 
-	boolean removeUserById(Integer id);
+	boolean removeUserById(String id);
 
-	UserDTO getUser(Integer id);
+	UserResponseDTO getUser(String id);
 
 	PageUsers findAll(Integer page, Integer size, String sort);
 
-	boolean updateUser(Integer id, List<PatchDocument> patchDocuments);
+	boolean updateUser(String id, List<PatchDocument> patchDocuments);
+
+	UserDoc getUserDoc(String userId);
+
+	default UserResponseDTO mapUserDTO(UserDoc user) {
+		UserResponseDTO resp = new UserResponseDTO();
+		resp.setCountry(user.getCountry());
+		resp.setDriverLicenseNo(user.getDriverLicenseNo());
+		resp.setEmail(user.getEmail());
+		resp.setFirstName(user.getFirstName());
+		resp.setId(user.get_id());
+		resp.setLastName(user.getLastName());
+		resp.setPassword(null);
+		resp.setStatus(user.getStatus());
+		resp.setUsername(user.getUsername());
+		return resp;
+	}
 
 }

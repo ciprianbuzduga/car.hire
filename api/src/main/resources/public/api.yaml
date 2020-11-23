@@ -63,12 +63,12 @@ paths:
       description: Create a new user
       operationId: createUser
       requestBody:
-        description: Payload of user, id attribute is ignored
+        description: Payload of user
         required : true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserDTO'
+              $ref: '#/components/schemas/UserRequestDTO'
       responses:
         '201':
           description: A new user was created with success
@@ -87,13 +87,13 @@ paths:
       tags:
         - user
       summary: Return a user by id.
-      description: Return a user by id. The id is an integer.
+      description: Return a user by id. The id is a string.
       operationId: getUser
       parameters:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           description: The id of user
           required: true
       responses:
@@ -102,7 +102,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/UserDTO'
+                  $ref: '#/components/schemas/UserResponseDTO'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -116,13 +116,13 @@ paths:
       tags:
         - user
       summary: Delete a user by id
-      description: Delete a user by id. The id is an integer.
+      description: Delete a user by id. The id is a string.
       operationId: deleteUser
       parameters:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           description: The id of user
           required: true
       responses:
@@ -147,7 +147,7 @@ paths:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           description: The id of user
           required: true
       requestBody:
@@ -172,12 +172,12 @@ paths:
       description: Add a car to the fleet
       operationId: addCar
       requestBody:
-        description: Payload of car, id attribute is ignored
+        description: Payload of car
         required : true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CarDTO'
+              $ref: '#/components/schemas/CarRequestDTO'
       responses:
         '201':
           description: A new car was added with success to the fleet
@@ -242,13 +242,13 @@ paths:
       tags:
         - car
       summary: Return a car by id.
-      description: Return a car by id. The id is an integer.
+      description: Return a car by id. The id is a string.
       operationId: getCar
       parameters:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           description: The id of car
           required: true
       responses:
@@ -257,7 +257,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/CarDTO'
+                  $ref: '#/components/schemas/CarResponseDTO'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -271,13 +271,13 @@ paths:
       tags:
         - car
       summary: Delete a car by id
-      description: Delete a car by id. The id is an integer.
+      description: Delete a car by id. The id is a string.
       operationId: deleteCar
       parameters:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           description: The id of car
           required: true
       responses:
@@ -302,7 +302,7 @@ paths:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           description: The id of car
           required: true
       requestBody:
@@ -327,12 +327,12 @@ paths:
       description: Create a reservation
       operationId: createRental
       requestBody:
-        description: Payload of rental, id attribute is ignored
+        description: Payload of rental
         required : true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RentalDTO'
+              $ref: '#/components/schemas/RentalRequestDTO'
       responses:
         '201':
           description: A new rental was added with success
@@ -379,13 +379,13 @@ paths:
         - in: query
           name: userId
           schema:
-            type: integer
+            type: string
           required: false  
           description: A value to filter rentals by user id
         - in: query
           name: carId
           schema:
-            type: integer
+            type: string
           required: false  
           description: A value to filter rentals by car id
         - in: query
@@ -409,13 +409,13 @@ paths:
       tags:
         - rental
       summary: Return a reservation by id.
-      description: Return a reservation by id. The id is an integer.
+      description: Return a reservation by id. The id is a string.
       operationId: getRental
       parameters:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           description: The id of rental
           required: true
       responses:
@@ -424,7 +424,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/RentalDTO'
+                  $ref: '#/components/schemas/RentalResponseDTO'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -437,14 +437,14 @@ paths:
     delete:
       tags:
         - rental
-      summary: Cancel a rental by id
-      description: Cancel a rental by id. The id is an integer.
-      operationId: cancelRental
+      summary: Delete a rental by id
+      description: Delete a rental by id. The id is a string.
+      operationId: deleteRental
       parameters:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           description: The id of rental
           required: true
       responses:
@@ -469,7 +469,7 @@ paths:
         - in: path
           name: id
           schema:
-            type: integer
+            type: string
           description: The id of rental
           required: true
       requestBody:
@@ -477,6 +477,131 @@ paths:
       responses:
         '204':
           description: Update a rental with success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /countries:
+    post:
+      tags:
+        - country
+      summary: Create a country
+      description: Create a country
+      operationId: createCountry
+      requestBody:
+        description: Payload of country
+        required : true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CountryRequestDTO'
+      responses:
+        '201':
+          description: A new country was added with success
+          headers:
+            'Location':
+              $ref: '#/components/headers/CountryLocation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    get:
+      tags:
+        - country
+      summary: Return a list with the countries
+      description: Return a list with the countries
+      operationId: getCountries
+      responses:
+        '200':
+          $ref: '#/components/responses/ListCountries'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /countries/{id}:
+    get:
+      tags:
+        - country
+      summary: Return a country by id.
+      description: Return a country by id. The id is a string.
+      operationId: getCountry
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          description: The id of country
+          required: true
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/CountryResponseDTO'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    delete:
+      tags:
+        - country
+      summary: Delete a country by id
+      description: Delete hard a country by id. The id is a string.
+      operationId: deleteCountry
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          description: The id of country
+          required: true
+      responses:
+        '204':
+          description: Cancel a rental with success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/ResourceNotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    patch:
+      tags:
+        - country
+      summary: Update a country
+      description: Update a country’s details using a PATCH request
+      operationId: updateCountry
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          description: The id of country
+          required: true
+      requestBody:
+        $ref: '#/components/requestBodies/PatchBody'
+      responses:
+        '204':
+          description: Update a country with success
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -539,6 +664,15 @@ components:
           schema:
             $ref: '#/components/schemas/PageRentals'
 
+    ListCountries:
+      description: A list of countries retrived from getCountries call
+      content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CountryResponseDTO'
+
   headers:
     UserLocation:
       schema:
@@ -554,6 +688,11 @@ components:
       schema:
         type: string
       description: The url for access a rental by id
+
+    CountryLocation:
+      schema:
+        type: string
+      description: The url for access a country by id
 
   schemas:
     PatchBody:
@@ -589,10 +728,10 @@ components:
         type: string 
         description: A string containing a JSON Pointer value.
 
-    PageUsers:
+    PageRecords:
       type: object
       properties:
-        totalNoUsers:
+        totalNoRecords:
           type: integer
           format: int32
         totalPages:
@@ -604,57 +743,40 @@ components:
         pageSize:
           type: integer
           format: int32
-        users:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserDTO'
+
+    PageUsers:
+      allOf:
+        - $ref: '#/components/schemas/PageRecords'
+        - type: object
+          properties:
+            users:
+              type: array
+              items:
+                $ref: '#/components/schemas/UserResponseDTO'
 
     PageCars:
-      type: object
-      properties:
-        totalNoCars:
-          type: integer
-          format: int32
-        totalPages:
-          type: integer
-          format: int32
-        currentPage:
-          type: integer
-          format: int32
-        pageSize:
-          type: integer
-          format: int32
-        cars:
-          type: array
-          items:
-            $ref: '#/components/schemas/CarDTO'
+      allOf:
+        - $ref: '#/components/schemas/PageRecords'
+        - type: object
+          properties:
+            cars:
+              type: array
+              items:
+                $ref: '#/components/schemas/CarResponseDTO'
 
     PageRentals:
-      type: object
-      properties:
-        totalNoRentals:
-          type: integer
-          format: int32
-        totalPages:
-          type: integer
-          format: int32
-        currentPage:
-          type: integer
-          format: int32
-        pageSize:
-          type: integer
-          format: int32
-        rentals:
-          type: array
-          items:
-            $ref: '#/components/schemas/RentalDTO'
+      allOf:
+        - $ref: '#/components/schemas/PageRecords'
+        - type: object
+          properties:
+            rentals:
+              type: array
+              items:
+                $ref: '#/components/schemas/RentalResponseDTO'
 
-    UserDTO:
+    UserRequestDTO:
       type: object
       properties:
-        id:
-          type: integer
-          format: int32
         email:
           type: string
           format: email
@@ -673,15 +795,23 @@ components:
         driverLicenseNo:
           type: string
         status:
-          type: string
-          enum: [ACTIVE, DELETED]
+          $ref: '#/components/schemas/UserStatusDTO'
 
-    CarDTO:
+    UserStatusDTO:
+      type: string
+      enum: [ACTIVE, DELETED]
+
+    UserResponseDTO:
+      allOf:
+        - $ref: '#/components/schemas/UserRequestDTO'
+        - type: object
+          properties:
+            id:
+              type: string
+        
+    CarRequestDTO:
       type: object
       properties:
-        id:
-          type: integer
-          format: int32
         make:
           type: string
         model:
@@ -694,24 +824,34 @@ components:
           format: int32
         fuel:
           type: string
-        carClazz:
-          type: string
+        clazzCode:
+          $ref: '#/components/schemas/CarClazzCodeDTO'
         status:
-          type: string
-          enum: [ACTIVE, DELETED]
+          $ref: '#/components/schemas/CarStatusDTO'
 
-    RentalDTO:
+    CarClazzCodeDTO:
+      type: string
+      enum: [Compact Car, Sport Utility vehicle, Sedan, Sports car, Truck, Luxury vehicle, Van, Minivan, Full-size care, Mind-size car, Convertible, Hybrid vehicle, Hatchback, Crossover, Coupe]
+
+    CarStatusDTO:
+      type: string
+      enum: [ACTIVE, DELETED]
+
+    CarResponseDTO:
+      allOf:
+        - $ref: '#/components/schemas/CarRequestDTO'
+        - type: object
+          properties:
+            id:
+              type: string
+
+    RentalRequestDTO:
       type: object
       properties:
-        id:
-          type: integer
-          format: int32
         userId:
-          type: integer
-          format: int32
+          type: string
         carId:
-          type: integer
-          format: int32
+          type: string
         startDate:
           type: string
           format: date-time
@@ -719,8 +859,51 @@ components:
           type: string
           format: date-time
         status:
+          $ref: '#/components/schemas/RentalStatusDTO'
+
+    RentalStatusDTO:
+      type: string
+      enum: [ACTIVE, CANCELLED]
+
+    RentalResponseDTO:
+      type: object
+      properties:
+        id:
           type: string
-          enum: [ACTIVE, CANCELLED]
+        user:
+          $ref: '#/components/schemas/UserResponseDTO'
+        car:
+          $ref: '#/components/schemas/CarResponseDTO'
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/RentalStatusDTO'
+
+    CountryRequestDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        isoCode:
+          type: string
+        status:
+          $ref: '#/components/schemas/CountryStatusDTO'
+
+    CountryStatusDTO:
+      type: string
+      enum: [ACTIVE, INACTIVE]
+
+    CountryResponseDTO:
+      allOf:
+        - $ref: '#/components/schemas/CountryRequestDTO'
+        - type: object
+          properties:
+            id:
+              type: string
 
     ValidationDTO:
       type: object
