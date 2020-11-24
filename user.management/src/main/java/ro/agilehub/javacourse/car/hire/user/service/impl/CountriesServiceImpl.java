@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import ro.agilehub.javacourse.car.hire.api.common.PatchMapper;
 import ro.agilehub.javacourse.car.hire.api.model.CountryRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.CountryResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
@@ -78,7 +79,8 @@ public class CountriesServiceImpl implements CountriesService {
 
 	@Override
 	public boolean updateCountry(String id, List<PatchDocument> patchDocuments) {
-		return repository.updateDoc(patchDocuments, CountryDoc.class, id);
+		PatchMapper patchMapper = PatchMapper.getPatchMapper(patchDocuments, CountryDoc.class);
+		return repository.updateDoc(CountryDoc.class, id, patchMapper.getFieldValues());
 	}
 
 }

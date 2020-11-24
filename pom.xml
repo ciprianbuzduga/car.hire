@@ -21,6 +21,8 @@
         <module>rental</module>
         <module>api</module>
         <module>boot</module>
+        <module>car.documents</module>
+        <module>car.repository</module>
     </modules>
 
     <properties>
