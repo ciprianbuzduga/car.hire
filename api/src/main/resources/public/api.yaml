@@ -774,16 +774,13 @@ components:
               items:
                 $ref: '#/components/schemas/RentalResponseDTO'
 
-    UserRequestDTO:
+    UserDTO:
       type: object
       properties:
         email:
           type: string
           format: email
           pattern: '^(.+)@(.+)$'
-        password:
-          type: string
-          format: password
         username:
           type: string
         firstName:
@@ -795,13 +792,22 @@ components:
         driverLicenseNo:
           type: string
 
+    UserRequestDTO:
+      allOf:
+        - $ref: '#/components/schemas/UserDTO'
+        - type: object
+          properties:
+            password:
+              type: string
+              format: password
+
     UserStatusDTO:
       type: string
       enum: [ACTIVE, DELETED]
 
     UserResponseDTO:
       allOf:
-        - $ref: '#/components/schemas/UserRequestDTO'
+        - $ref: '#/components/schemas/UserDTO'
         - type: object
           properties:
             id:
