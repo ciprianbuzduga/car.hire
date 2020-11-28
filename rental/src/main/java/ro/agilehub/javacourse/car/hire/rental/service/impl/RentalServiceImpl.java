@@ -1,10 +1,7 @@
 package ro.agilehub.javacourse.car.hire.rental.service.impl;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,29 +13,21 @@ import ro.agilehub.javacourse.car.hire.api.model.PageRentals;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.api.model.RentalRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.RentalResponseDTO;
-import ro.agilehub.javacourse.car.hire.api.model.RentalStatusDTO;
-import ro.agilehub.javacourse.car.hire.fleet.document.CarDoc;
-import ro.agilehub.javacourse.car.hire.fleet.service.CarsService;
 import ro.agilehub.javacourse.car.hire.rental.document.RentalDoc;
-import ro.agilehub.javacourse.car.hire.rental.document.RentalStatusEnum;
+import ro.agilehub.javacourse.car.hire.rental.mapper.RentalMapper;
 import ro.agilehub.javacourse.car.hire.rental.repository.RentalRepository;
 import ro.agilehub.javacourse.car.hire.rental.service.RentalService;
-import ro.agilehub.javacourse.car.hire.user.document.UserDoc;
-import ro.agilehub.javacourse.car.hire.user.service.UsersService;
 
 @Service
 public class RentalServiceImpl implements RentalService {
 
 	private final RentalRepository rentalRepository;
-	private final CarsService carsService;
-	private final UsersService usersService;
+	private final RentalMapper rentalMapper;
 
 	public RentalServiceImpl(RentalRepository rentalRepository,
-			CarsService carsService,
-			UsersService usersService) {
+			RentalMapper rentalMapper) {
 		this.rentalRepository = rentalRepository;
-		this.carsService = carsService;
-		this.usersService = usersService;
+		this.rentalMapper = rentalMapper;
 	}
 
 	@Override
@@ -60,16 +49,7 @@ public class RentalServiceImpl implements RentalService {
 
 	@Override
 	public String createRental(RentalRequestDTO rentalDTO) {
-		RentalDoc rent = new RentalDoc();
-		String carId = rentalDTO.getCarId();
-		CarDoc car = carsService.getCarDoc(carId);
-		rent.setCar(car);
-		String userId = rentalDTO.getUserId();
-		UserDoc user = usersService.getUserDoc(userId);
-		rent.setUser(user);
-		rent.setEndDate(rentalDTO.getEndDate().toLocalDateTime());
-		rent.setStartDate(rentalDTO.getStartDate().toLocalDateTime());
-		rent.setStatus(RentalStatusEnum.ACTIVE);
+		RentalDoc rent = rentalMapper.mapToRentalDoc(rentalDTO);
 		try {
 			rent = rentalRepository.save(rent);
 			return rent.get_id();
@@ -82,20 +62,7 @@ public class RentalServiceImpl implements RentalService {
 	@Override
 	public RentalResponseDTO getRental(String id) {
 		RentalDoc rentDoc = getRentalDoc(id);
-		return mapRentalDTO(rentDoc);
-	}
-
-	private RentalResponseDTO mapRentalDTO(RentalDoc rentDoc) {
-		RentalResponseDTO rentResp = new RentalResponseDTO();
-		Optional.ofNullable(rentDoc.getCar()).ifPresent(
-				car -> rentResp.setCar(carsService.mapCarDTO(car)));
-		rentResp.setEndDate(OffsetDateTime.of(rentDoc.getEndDate(), ZoneOffset.UTC));
-		rentResp.setId(rentDoc.get_id());
-		rentResp.setStartDate(OffsetDateTime.of(rentDoc.getStartDate(), ZoneOffset.UTC));
-		rentResp.setStatus(RentalStatusDTO.fromValue(rentDoc.getStatus().getValue()));
-		Optional.ofNullable(rentDoc.getUser()).ifPresent(
-				user -> rentResp.setUser(usersService.mapUserDTO(user)));
-		return rentResp;
+		return rentalMapper.mapToRentalResponseDTO(rentDoc);
 	}
 
 	@Override
@@ -110,8 +77,8 @@ public class RentalServiceImpl implements RentalService {
 			.totalNoRecords((int) pageRentDocs.getTotalElements())
 			.totalPages(pageRentDocs.getTotalPages());
 		if(pageRentDocs.hasContent())
-			pageRentDocs.forEach(rent -> pageRentals
-					.addRentalsItem(mapRentalDTO(rent)));
+			pageRentDocs.forEach(rent -> pageRentals.addRentalsItem(
+							rentalMapper.mapToRentalResponseDTO(rent)));
 		return pageRentals;
 	}
 
