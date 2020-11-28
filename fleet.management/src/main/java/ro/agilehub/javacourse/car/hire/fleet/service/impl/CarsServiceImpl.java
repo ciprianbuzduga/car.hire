@@ -3,7 +3,6 @@ package ro.agilehub.javacourse.car.hire.fleet.service.impl;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +21,6 @@ import ro.agilehub.javacourse.car.hire.fleet.repository.CarRepository;
 import ro.agilehub.javacourse.car.hire.fleet.repository.MakeCarRepository;
 import ro.agilehub.javacourse.car.hire.fleet.service.CarsService;
 
-@Qualifier("carsService")
 @Service
 public class CarsServiceImpl implements CarsService {
 

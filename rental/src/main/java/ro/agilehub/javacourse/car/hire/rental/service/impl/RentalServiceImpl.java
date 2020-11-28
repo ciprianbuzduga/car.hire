@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +26,6 @@ import ro.agilehub.javacourse.car.hire.rental.service.RentalService;
 import ro.agilehub.javacourse.car.hire.user.document.UserDoc;
 import ro.agilehub.javacourse.car.hire.user.service.UsersService;
 
-@Qualifier("rentalService")
 @Service
 public class RentalServiceImpl implements RentalService {
 
@@ -36,8 +34,8 @@ public class RentalServiceImpl implements RentalService {
 	private final UsersService usersService;
 
 	public RentalServiceImpl(RentalRepository rentalRepository,
-			@Qualifier("carsService") CarsService carsService,
-			@Qualifier("usersService") UsersService usersService) {
+			CarsService carsService,
+			UsersService usersService) {
 		this.rentalRepository = rentalRepository;
 		this.carsService = carsService;
 		this.usersService = usersService;
