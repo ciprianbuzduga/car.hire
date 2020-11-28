@@ -40,7 +40,6 @@ public class UsersServiceStub implements UsersService {
 			dto.setFirstName("User First Stub " + i);
 			dto.setId("" + i);
 			dto.setLastName("User Last Stub " + i);
-			dto.setPassword(null);
 			dto.setStatus((i % 10) == 0 ? UserStatusDTO.DELETED
 					: UserStatusDTO.ACTIVE);
 			dto.setUsername("Username Stub " + i);
@@ -60,7 +59,6 @@ public class UsersServiceStub implements UsersService {
 		user.setFirstName(userDTO.getFirstName());
 		user.setId(String.valueOf(nextId));
 		user.setLastName(userDTO.getLastName());
-		user.setPassword(userDTO.getPassword());
 		user.setStatus(UserStatusDTO.ACTIVE);
 		user.setUsername(userDTO.getUsername());
 		userStubs.add(user);
@@ -104,7 +102,6 @@ public class UsersServiceStub implements UsersService {
 
 		List<UserResponseDTO> finalList = listUsers.size() > page ?
 				listUsers.get(page) : Collections.emptyList();
-		finalList.forEach(u -> u.setPassword(null));
 
 		PageUsers pageUsers = new PageUsers();
 		pageUsers.setCurrentPage(page);

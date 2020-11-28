@@ -15,7 +15,7 @@ import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.api.model.UserRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.UserResponseDTO;
 import ro.agilehub.javacourse.car.hire.user.document.UserDoc;
-import ro.agilehub.javacourse.car.hire.user.document.UserStatusEnum;
+import ro.agilehub.javacourse.car.hire.user.mapper.UserMapper;
 import ro.agilehub.javacourse.car.hire.user.repository.UserRepository;
 import ro.agilehub.javacourse.car.hire.user.service.UsersService;
 
@@ -24,22 +24,18 @@ import ro.agilehub.javacourse.car.hire.user.service.UsersService;
 public class UsersServiceImpl implements UsersService {
 
 	private final UserRepository repository;
+	private final UserMapper userMapper;
 
-	public UsersServiceImpl(UserRepository repository) {
+	public UsersServiceImpl(UserRepository repository,
+			UserMapper userMapper) {
 		this.repository = repository;
+		this.userMapper = userMapper;
 	}
 
 	@Override
 	public String addUser(UserRequestDTO userDTO) {
-		UserDoc user = new UserDoc();
-		user.setCountry(userDTO.getCountry());
-		user.setDriverLicenseNo(userDTO.getDriverLicenseNo());
-		user.setFirstName(userDTO.getFirstName());
-		user.setLastName(userDTO.getLastName());
-		user.setPassword(userDTO.getPassword());
-		user.setStatus(UserStatusEnum.ACTIVE);
-		user.setUsername(userDTO.getUsername());
 		try {
+			UserDoc user = userMapper.mapToUserDoc(userDTO);
 			user = repository.save(user);
 			return user.get_id();
 		} catch (Exception e) {
@@ -69,13 +65,12 @@ public class UsersServiceImpl implements UsersService {
 	@Override
 	public UserResponseDTO getUser(String id) {
 		UserDoc user = getUserDoc(id);
-		return mapUserDTO(user);
+		return userMapper.mapToUserResponseDTO(user);
 	}
 
 	@Override
 	public PageUsers findAll(Integer page, Integer size, String sort) {
-		Pageable pageable = null;
-		PageRequest.of(page, size);
+		Pageable pageable = PageRequest.of(page, size);
 		Page<UserDoc> pageUsersDoc = repository.findAll(pageable);
 		PageUsers pageUsers = new PageUsers();
 		pageUsers.currentPage(page)
@@ -83,7 +78,8 @@ public class UsersServiceImpl implements UsersService {
 			.totalNoRecords((int) pageUsersDoc.getTotalElements())
 			.totalPages(pageUsersDoc.getTotalPages());
 		if(pageUsersDoc.hasContent())
-			pageUsersDoc.forEach(car -> pageUsers.addUsersItem(mapUserDTO(car)));
+			pageUsersDoc.forEach(user -> pageUsers.addUsersItem(
+					userMapper.mapToUserResponseDTO(user)));
 		return pageUsers;
 	}
 

@@ -54,7 +54,6 @@ public class UsersController implements UsersApi {
 	@Override
 	public ResponseEntity<UserResponseDTO> getUser(String id) {
 		UserResponseDTO user = usersService.getUser(id);
-		user.setPassword(null);
 		return ResponseEntity.ok(user);
 	}
 
