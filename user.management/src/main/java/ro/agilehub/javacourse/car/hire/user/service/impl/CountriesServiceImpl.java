@@ -28,7 +28,7 @@ public class CountriesServiceImpl implements CountriesService {
 	@Override
 	public String createCountry(CountryRequestDTO country) {
 		CountryDoc doc = new CountryDoc();
-		doc.setStatus(CountryStatusEnum.fromValue(country.getStatus().getValue()));
+		doc.setStatus(CountryStatusEnum.ACTIVE);
 		doc.setIsoCode(country.getIsoCode());
 		doc.setName(country.getName());
 		try {

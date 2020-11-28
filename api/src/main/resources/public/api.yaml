@@ -794,8 +794,6 @@ components:
           type: string
         driverLicenseNo:
           type: string
-        status:
-          $ref: '#/components/schemas/UserStatusDTO'
 
     UserStatusDTO:
       type: string
@@ -808,6 +806,8 @@ components:
           properties:
             id:
               type: string
+            status:
+              $ref: '#/components/schemas/UserStatusDTO'
         
     CarRequestDTO:
       type: object
@@ -826,8 +826,6 @@ components:
           type: string
         clazzCode:
           $ref: '#/components/schemas/CarClazzCodeDTO'
-        status:
-          $ref: '#/components/schemas/CarStatusDTO'
 
     CarClazzCodeDTO:
       type: string
@@ -844,6 +842,8 @@ components:
           properties:
             id:
               type: string
+            status:
+              $ref: '#/components/schemas/CarStatusDTO'
 
     RentalRequestDTO:
       type: object
@@ -858,8 +858,6 @@ components:
         endDate:
           type: string
           format: date-time
-        status:
-          $ref: '#/components/schemas/RentalStatusDTO'
 
     RentalStatusDTO:
       type: string
@@ -890,8 +888,6 @@ components:
           type: string
         isoCode:
           type: string
-        status:
-          $ref: '#/components/schemas/CountryStatusDTO'
 
     CountryStatusDTO:
       type: string
@@ -904,6 +900,8 @@ components:
           properties:
             id:
               type: string
+            status:
+              $ref: '#/components/schemas/CountryStatusDTO'
 
     ValidationDTO:
       type: object
