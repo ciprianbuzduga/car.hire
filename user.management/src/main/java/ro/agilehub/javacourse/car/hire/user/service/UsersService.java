@@ -6,6 +6,7 @@ import ro.agilehub.javacourse.car.hire.api.model.PageUsers;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.api.model.UserRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.UserResponseDTO;
+import ro.agilehub.javacourse.car.hire.api.model.UserStatusDTO;
 import ro.agilehub.javacourse.car.hire.user.document.UserDoc;
 
 public interface UsersService {
@@ -31,7 +32,7 @@ public interface UsersService {
 		resp.setId(user.get_id());
 		resp.setLastName(user.getLastName());
 		resp.setPassword(null);
-		resp.setStatus(user.getStatus());
+		resp.setStatus(UserStatusDTO.fromValue(user.getStatus().getValue()));
 		resp.setUsername(user.getUsername());
 		return resp;
 	}

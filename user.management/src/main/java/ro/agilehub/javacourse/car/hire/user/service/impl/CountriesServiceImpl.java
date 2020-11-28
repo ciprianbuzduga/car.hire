@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import ro.agilehub.javacourse.car.hire.api.common.PatchMapper;
 import ro.agilehub.javacourse.car.hire.api.model.CountryRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.CountryResponseDTO;
+import ro.agilehub.javacourse.car.hire.api.model.CountryStatusDTO;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.user.document.CountryDoc;
+import ro.agilehub.javacourse.car.hire.user.document.CountryStatusEnum;
 import ro.agilehub.javacourse.car.hire.user.repository.CountryRepository;
 import ro.agilehub.javacourse.car.hire.user.service.CountriesService;
 
@@ -26,7 +28,7 @@ public class CountriesServiceImpl implements CountriesService {
 	@Override
 	public String createCountry(CountryRequestDTO country) {
 		CountryDoc doc = new CountryDoc();
-		doc.setStatus(country.getStatus());
+		doc.setStatus(CountryStatusEnum.fromValue(country.getStatus().getValue()));
 		doc.setIsoCode(country.getIsoCode());
 		doc.setName(country.getName());
 		try {
@@ -64,7 +66,7 @@ public class CountriesServiceImpl implements CountriesService {
 
 	private CountryResponseDTO mapDTO(CountryDoc doc) {
 		CountryResponseDTO dto = new CountryResponseDTO();
-		doc.setStatus(dto.getStatus());
+		dto.setStatus(CountryStatusDTO.fromValue(doc.getStatus().getValue()));
 		dto.setId(doc.get_id());
 		dto.setIsoCode(doc.getIsoCode());
 		dto.setName(doc.getName());

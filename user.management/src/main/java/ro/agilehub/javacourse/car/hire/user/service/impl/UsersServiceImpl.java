@@ -14,8 +14,8 @@ import ro.agilehub.javacourse.car.hire.api.model.PageUsers;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.api.model.UserRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.UserResponseDTO;
-import ro.agilehub.javacourse.car.hire.api.model.UserStatusDTO;
 import ro.agilehub.javacourse.car.hire.user.document.UserDoc;
+import ro.agilehub.javacourse.car.hire.user.document.UserStatusEnum;
 import ro.agilehub.javacourse.car.hire.user.repository.UserRepository;
 import ro.agilehub.javacourse.car.hire.user.service.UsersService;
 
@@ -37,7 +37,7 @@ public class UsersServiceImpl implements UsersService {
 		user.setFirstName(userDTO.getFirstName());
 		user.setLastName(userDTO.getLastName());
 		user.setPassword(userDTO.getPassword());
-		user.setStatus(UserStatusDTO.ACTIVE);
+		user.setStatus(UserStatusEnum.ACTIVE);
 		user.setUsername(userDTO.getUsername());
 		try {
 			user = repository.save(user);
