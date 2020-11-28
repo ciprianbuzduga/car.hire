@@ -9,10 +9,9 @@ import org.springframework.stereotype.Service;
 import ro.agilehub.javacourse.car.hire.api.common.PatchMapper;
 import ro.agilehub.javacourse.car.hire.api.model.CountryRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.CountryResponseDTO;
-import ro.agilehub.javacourse.car.hire.api.model.CountryStatusDTO;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.user.document.CountryDoc;
-import ro.agilehub.javacourse.car.hire.user.document.CountryStatusEnum;
+import ro.agilehub.javacourse.car.hire.user.mapper.CountryMapper;
 import ro.agilehub.javacourse.car.hire.user.repository.CountryRepository;
 import ro.agilehub.javacourse.car.hire.user.service.CountriesService;
 
@@ -20,18 +19,18 @@ import ro.agilehub.javacourse.car.hire.user.service.CountriesService;
 public class CountriesServiceImpl implements CountriesService {
 
 	private final CountryRepository repository;
+	private final CountryMapper countryMapper;
 
-	public CountriesServiceImpl(CountryRepository repository) {
+	public CountriesServiceImpl(CountryRepository repository,
+			CountryMapper countryMapper) {
 		this.repository = repository;
+		this.countryMapper = countryMapper;
 	}
 
 	@Override
 	public String createCountry(CountryRequestDTO country) {
-		CountryDoc doc = new CountryDoc();
-		doc.setStatus(CountryStatusEnum.ACTIVE);
-		doc.setIsoCode(country.getIsoCode());
-		doc.setName(country.getName());
 		try {
+			CountryDoc doc = countryMapper.mapToCountryDoc(country);
 			CountryDoc savedDoc = repository.save(doc);
 			return savedDoc.get_id();
 		} catch (Exception e) {
@@ -55,7 +54,7 @@ public class CountriesServiceImpl implements CountriesService {
 	@Override
 	public CountryResponseDTO getCountry(String id) {
 		CountryDoc doc = getCountryDoc(id);
-		return mapDTO(doc);
+		return countryMapper.mapToCountryResponseDTO(doc);
 	}
 
 	private CountryDoc getCountryDoc(String id) {
@@ -64,18 +63,10 @@ public class CountriesServiceImpl implements CountriesService {
 		return doc;
 	}
 
-	private CountryResponseDTO mapDTO(CountryDoc doc) {
-		CountryResponseDTO dto = new CountryResponseDTO();
-		dto.setStatus(CountryStatusDTO.fromValue(doc.getStatus().getValue()));
-		dto.setId(doc.get_id());
-		dto.setIsoCode(doc.getIsoCode());
-		dto.setName(doc.getName());
-		return dto;
-	}
-
 	@Override
 	public List<CountryResponseDTO> findAll() {
-		return repository.findAll().stream().map(c -> mapDTO(c))
+		return repository.findAll().stream().map(
+					c -> countryMapper.mapToCountryResponseDTO(c))
 				.collect(Collectors.toList());
 	}
 
