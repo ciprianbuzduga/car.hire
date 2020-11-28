@@ -13,41 +13,26 @@ import ro.agilehub.javacourse.car.hire.api.model.CarRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.CarResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.model.PageCars;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
-import ro.agilehub.javacourse.car.hire.fleet.document.CarClazzEnum;
 import ro.agilehub.javacourse.car.hire.fleet.document.CarDoc;
-import ro.agilehub.javacourse.car.hire.fleet.document.CarStatusEnum;
-import ro.agilehub.javacourse.car.hire.fleet.document.MakeCarDoc;
+import ro.agilehub.javacourse.car.hire.fleet.mapper.CarMapper;
 import ro.agilehub.javacourse.car.hire.fleet.repository.CarRepository;
-import ro.agilehub.javacourse.car.hire.fleet.repository.MakeCarRepository;
 import ro.agilehub.javacourse.car.hire.fleet.service.CarsService;
 
 @Service
 public class CarsServiceImpl implements CarsService {
 
 	private final CarRepository carRepository;
-	private final MakeCarRepository makeCarRepository;
+	private final CarMapper carMapper;
 
 	public CarsServiceImpl(CarRepository carRepository,
-			MakeCarRepository makeCarRepository) {
+			CarMapper carMapper) {
 		this.carRepository = carRepository;
-		this.makeCarRepository = makeCarRepository;
+		this.carMapper = carMapper;
 	}
 
 	@Override
 	public String addCar(CarRequestDTO carDTO) {
-		CarDoc carDoc = new CarDoc();
-		carDoc.setClazzCode(CarClazzEnum.fromValue(carDTO.getClazzCode().getValue()));
-		carDoc.setFuel(carDTO.getFuel());
-		String make = carDTO.getMake();
-		MakeCarDoc makeDoc = makeCarRepository.findByName(make);
-		if(makeDoc == null)
-			throw new NoSuchElementException("No makeCar found with name " + make);
-		
-		carDoc.setMakeCar(makeDoc);
-		carDoc.setMileage(carDTO.getMileage());
-		carDoc.setModel(carDTO.getModel());
-		carDoc.setStatus(CarStatusEnum.ACTIVE);
-		carDoc.setYear(carDTO.getYear());
+		CarDoc carDoc = carMapper.mapToCarDoc(carDTO);
 		try {
 			carDoc = carRepository.save(carDoc);
 			return carDoc.get_id();
@@ -78,7 +63,7 @@ public class CarsServiceImpl implements CarsService {
 	@Override
 	public CarResponseDTO getCar(String id) {
 		CarDoc carDoc = getCarDoc(id);
-		return mapCarDTO(carDoc);
+		return carMapper.mapToCarResponseDTO(carDoc);
 	}
 
 	@Override
@@ -91,7 +76,8 @@ public class CarsServiceImpl implements CarsService {
 			.totalNoRecords((int) pageCarsDoc.getTotalElements())
 			.totalPages(pageCarsDoc.getTotalPages());
 		if(pageCarsDoc.hasContent())
-			pageCarsDoc.forEach(car -> pageCars.addCarsItem(mapCarDTO(car)));
+			pageCarsDoc.forEach(car -> pageCars.addCarsItem(
+					carMapper.mapToCarResponseDTO(car)));
 		return pageCars;
 	}
 
