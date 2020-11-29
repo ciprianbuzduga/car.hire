@@ -4,5 +4,5 @@
 /fleet.management/target/
 /rental/target/
 /user.management/target/
-/.idea/
+/.settings
 /car.hire.iml
