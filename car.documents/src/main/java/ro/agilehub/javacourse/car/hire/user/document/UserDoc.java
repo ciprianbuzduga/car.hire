@@ -25,6 +25,8 @@ public class UserDoc {
 
 	private UserStatusEnum status;
 
+	private String title;
+
 	public String get_id() {
 		return _id;
 	}
@@ -95,6 +97,14 @@ public class UserDoc {
 
 	public void setStatus(UserStatusEnum status) {
 		this.status = status;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	@Override
