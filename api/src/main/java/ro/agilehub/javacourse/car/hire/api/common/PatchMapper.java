@@ -1,17 +1,16 @@
 package ro.agilehub.javacourse.car.hire.api.common;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
+import ro.agilehub.javacourse.car.hire.api.exception.PatchException;
+import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
+import ro.agilehub.javacourse.car.hire.api.model.PatchDocument.OpEnum;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang3.reflect.FieldUtils;
-
-import ro.agilehub.javacourse.car.hire.api.exception.PatchException;
-import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
-import ro.agilehub.javacourse.car.hire.api.model.PatchDocument.OpEnum;
 
 public class PatchMapper {
 	private static final Pattern PATTERN_WORDS = Pattern.compile("/\\w+");

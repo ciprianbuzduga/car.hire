@@ -1,31 +1,28 @@
 package ro.agilehub.javacourse.car.hire.user.service.impl;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import ro.agilehub.javacourse.car.hire.api.common.PatchMapper;
 import ro.agilehub.javacourse.car.hire.api.model.CountryRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.CountryResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
+import ro.agilehub.javacourse.car.hire.patch.repository.DocumentPatchRepository;
 import ro.agilehub.javacourse.car.hire.user.document.CountryDoc;
 import ro.agilehub.javacourse.car.hire.user.mapper.CountryMapper;
 import ro.agilehub.javacourse.car.hire.user.repository.CountryRepository;
 import ro.agilehub.javacourse.car.hire.user.service.CountriesService;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+
 @Service
+@RequiredArgsConstructor
 public class CountriesServiceImpl implements CountriesService {
 
 	private final CountryRepository repository;
 	private final CountryMapper countryMapper;
-
-	public CountriesServiceImpl(CountryRepository repository,
-			CountryMapper countryMapper) {
-		this.repository = repository;
-		this.countryMapper = countryMapper;
-	}
+	private final DocumentPatchRepository<CountryDoc, String> patchRepository;
 
 	@Override
 	public String createCountry(CountryRequestDTO country) {
@@ -73,7 +70,7 @@ public class CountriesServiceImpl implements CountriesService {
 	@Override
 	public boolean updateCountry(String id, List<PatchDocument> patchDocuments) {
 		PatchMapper patchMapper = PatchMapper.getPatchMapper(patchDocuments, CountryDoc.class);
-		return repository.updateDoc(CountryDoc.class, id, patchMapper.getFieldValues());
+		return patchRepository.updateDoc(CountryDoc.class, id, patchMapper.getFieldValues());
 	}
 
 }

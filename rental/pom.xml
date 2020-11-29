@@ -29,7 +29,7 @@
         </dependency>
         <dependency>
             <groupId>ro.agilehub.javacourse</groupId>
-            <artifactId>car.repository</artifactId>
+            <artifactId>repository.common</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

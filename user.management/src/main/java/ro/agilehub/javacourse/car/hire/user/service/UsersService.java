@@ -1,12 +1,12 @@
 package ro.agilehub.javacourse.car.hire.user.service;
 
-import java.util.List;
-
 import ro.agilehub.javacourse.car.hire.api.model.PageUsers;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.api.model.UserRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.UserResponseDTO;
 import ro.agilehub.javacourse.car.hire.user.document.UserDoc;
+
+import java.util.List;
 
 public interface UsersService {
 

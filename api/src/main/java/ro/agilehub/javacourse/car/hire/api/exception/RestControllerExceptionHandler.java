@@ -1,9 +1,5 @@
 package ro.agilehub.javacourse.car.hire.api.exception;
 
-import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
-
-import java.util.NoSuchElementException;
-
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.annotation.Order;
@@ -19,11 +15,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ServerErrorException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
-
 import ro.agilehub.javacourse.car.hire.api.model.ErrorDTO;
 import ro.agilehub.javacourse.car.hire.api.model.ValidationDTO;
+
+import java.util.NoSuchElementException;
+
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 @Order(HIGHEST_PRECEDENCE)
 @ControllerAdvice

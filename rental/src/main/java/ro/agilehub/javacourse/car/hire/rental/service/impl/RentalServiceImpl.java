@@ -1,34 +1,31 @@
 package ro.agilehub.javacourse.car.hire.rental.service.impl;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import ro.agilehub.javacourse.car.hire.api.common.PatchMapper;
 import ro.agilehub.javacourse.car.hire.api.model.PageRentals;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.api.model.RentalRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.RentalResponseDTO;
+import ro.agilehub.javacourse.car.hire.patch.repository.DocumentPatchRepository;
 import ro.agilehub.javacourse.car.hire.rental.document.RentalDoc;
 import ro.agilehub.javacourse.car.hire.rental.mapper.RentalMapper;
 import ro.agilehub.javacourse.car.hire.rental.repository.RentalRepository;
 import ro.agilehub.javacourse.car.hire.rental.service.RentalService;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
 @Service
+@RequiredArgsConstructor
 public class RentalServiceImpl implements RentalService {
 
 	private final RentalRepository rentalRepository;
 	private final RentalMapper rentalMapper;
-
-	public RentalServiceImpl(RentalRepository rentalRepository,
-			RentalMapper rentalMapper) {
-		this.rentalRepository = rentalRepository;
-		this.rentalMapper = rentalMapper;
-	}
+	private final DocumentPatchRepository<RentalDoc, String> patchRepository;
 
 	@Override
 	public boolean deleteRental(String id) {
@@ -85,7 +82,7 @@ public class RentalServiceImpl implements RentalService {
 	@Override
 	public boolean updateRental(String id, List<PatchDocument> patchDocuments) {
 		PatchMapper patchMapper = PatchMapper.getPatchMapper(patchDocuments, RentalDoc.class);
-		return rentalRepository.updateDoc(RentalDoc.class, id, patchMapper.getFieldValues());
+		return patchRepository.updateDoc(RentalDoc.class, id, patchMapper.getFieldValues());
 	}
 
 }

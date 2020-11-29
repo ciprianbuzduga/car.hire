@@ -1,10 +1,10 @@
 package ro.agilehub.javacourse.car.hire.rental.mapper;
 
+import org.mapstruct.Mapper;
+
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-
-import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface RentalDateMapper {

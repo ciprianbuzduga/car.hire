@@ -3,7 +3,6 @@ package ro.agilehub.javacourse.car.hire.rental.mapper;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
 import ro.agilehub.javacourse.car.hire.api.model.RentalRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.RentalResponseDTO;
 import ro.agilehub.javacourse.car.hire.fleet.mapper.CarMapper;

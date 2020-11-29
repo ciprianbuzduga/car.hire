@@ -1,11 +1,11 @@
 package ro.agilehub.javacourse.car.hire.rental.service;
 
-import java.util.List;
-
 import ro.agilehub.javacourse.car.hire.api.model.PageRentals;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.api.model.RentalRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.RentalResponseDTO;
+
+import java.util.List;
 
 public interface RentalService {
 

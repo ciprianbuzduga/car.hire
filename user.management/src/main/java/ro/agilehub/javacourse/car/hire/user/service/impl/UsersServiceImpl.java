@@ -1,34 +1,31 @@
 package ro.agilehub.javacourse.car.hire.user.service.impl;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import ro.agilehub.javacourse.car.hire.api.common.PatchMapper;
 import ro.agilehub.javacourse.car.hire.api.model.PageUsers;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.api.model.UserRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.UserResponseDTO;
+import ro.agilehub.javacourse.car.hire.patch.repository.DocumentPatchRepository;
 import ro.agilehub.javacourse.car.hire.user.document.UserDoc;
 import ro.agilehub.javacourse.car.hire.user.mapper.UserMapper;
 import ro.agilehub.javacourse.car.hire.user.repository.UserRepository;
 import ro.agilehub.javacourse.car.hire.user.service.UsersService;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
 @Service
+@RequiredArgsConstructor
 public class UsersServiceImpl implements UsersService {
 
 	private final UserRepository repository;
 	private final UserMapper userMapper;
-
-	public UsersServiceImpl(UserRepository repository,
-			UserMapper userMapper) {
-		this.repository = repository;
-		this.userMapper = userMapper;
-	}
+	private final DocumentPatchRepository<UserDoc, String> patchRepository;
 
 	@Override
 	public String addUser(UserRequestDTO userDTO) {
@@ -84,7 +81,7 @@ public class UsersServiceImpl implements UsersService {
 	@Override
 	public boolean updateUser(String id, List<PatchDocument> patchDocuments) {
 		PatchMapper patchMapper = PatchMapper.getPatchMapper(patchDocuments, UserDoc.class);
-		return repository.updateDoc(UserDoc.class, id, patchMapper.getFieldValues());
+		return patchRepository.updateDoc(UserDoc.class, id, patchMapper.getFieldValues());
 	}
 
 }

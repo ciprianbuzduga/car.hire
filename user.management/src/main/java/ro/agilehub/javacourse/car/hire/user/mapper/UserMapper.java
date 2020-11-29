@@ -2,7 +2,6 @@ package ro.agilehub.javacourse.car.hire.user.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
 import ro.agilehub.javacourse.car.hire.api.model.UserRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.UserResponseDTO;
 import ro.agilehub.javacourse.car.hire.user.document.UserDoc;

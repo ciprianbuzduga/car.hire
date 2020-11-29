@@ -1,20 +1,18 @@
 package ro.agilehub.javacourse.car.hire.user.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerErrorException;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import ro.agilehub.javacourse.car.hire.api.model.CountryRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.CountryResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.api.specification.CountriesApi;
 import ro.agilehub.javacourse.car.hire.user.service.CountriesService;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class CountriesController implements CountriesApi {
