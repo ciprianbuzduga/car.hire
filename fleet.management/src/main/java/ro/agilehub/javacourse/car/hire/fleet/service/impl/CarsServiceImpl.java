@@ -14,25 +14,35 @@ import ro.agilehub.javacourse.car.hire.api.model.CarResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.model.PageCars;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.fleet.document.CarDoc;
+import ro.agilehub.javacourse.car.hire.fleet.document.MakeCarDoc;
 import ro.agilehub.javacourse.car.hire.fleet.mapper.CarMapper;
 import ro.agilehub.javacourse.car.hire.fleet.repository.CarRepository;
+import ro.agilehub.javacourse.car.hire.fleet.repository.MakeCarRepository;
 import ro.agilehub.javacourse.car.hire.fleet.service.CarsService;
 
 @Service
 public class CarsServiceImpl implements CarsService {
 
 	private final CarRepository carRepository;
+	private final MakeCarRepository makeCarRepository;
 	private final CarMapper carMapper;
 
 	public CarsServiceImpl(CarRepository carRepository,
+			MakeCarRepository makeCarRepository,
 			CarMapper carMapper) {
 		this.carRepository = carRepository;
+		this.makeCarRepository = makeCarRepository;
 		this.carMapper = carMapper;
 	}
 
 	@Override
 	public String addCar(CarRequestDTO carDTO) {
+		String make = carDTO.getMake();
+		MakeCarDoc makeDoc = makeCarRepository.findByName(make);
+		if(makeDoc == null)
+			throw new NoSuchElementException("No makeCar found with name " + make);
 		CarDoc carDoc = carMapper.mapToCarDoc(carDTO);
+		carDoc.setMakeCar(makeDoc);
 		try {
 			carDoc = carRepository.save(carDoc);
 			return carDoc.get_id();

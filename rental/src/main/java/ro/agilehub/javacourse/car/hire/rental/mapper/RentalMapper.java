@@ -1,6 +1,5 @@
 package ro.agilehub.javacourse.car.hire.rental.mapper;
 
-import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -10,10 +9,7 @@ import ro.agilehub.javacourse.car.hire.fleet.mapper.CarMapper;
 import ro.agilehub.javacourse.car.hire.rental.document.RentalDoc;
 import ro.agilehub.javacourse.car.hire.user.mapper.UserMapper;
 
-@Mapper(unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE,
-	componentModel = "spring",
-	uses = {RentalDateMapper.class, UserMapper.class, CarMapper.class})
-@DecoratedWith(RentalMapperDecorator.class)
+@Mapper(uses = {RentalDateMapper.class, UserMapper.class, CarMapper.class})
 public interface RentalMapper {
 
 	@Mapping(target = "status",

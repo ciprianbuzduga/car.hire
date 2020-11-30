@@ -13,19 +13,30 @@ import ro.agilehub.javacourse.car.hire.api.model.PageRentals;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.api.model.RentalRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.RentalResponseDTO;
+import ro.agilehub.javacourse.car.hire.fleet.document.CarDoc;
+import ro.agilehub.javacourse.car.hire.fleet.service.CarsService;
 import ro.agilehub.javacourse.car.hire.rental.document.RentalDoc;
 import ro.agilehub.javacourse.car.hire.rental.mapper.RentalMapper;
 import ro.agilehub.javacourse.car.hire.rental.repository.RentalRepository;
 import ro.agilehub.javacourse.car.hire.rental.service.RentalService;
+import ro.agilehub.javacourse.car.hire.user.document.UserDoc;
+import ro.agilehub.javacourse.car.hire.user.service.UsersService;
 
 @Service
 public class RentalServiceImpl implements RentalService {
 
+	private final UsersService usersService;
+	private final CarsService carsService;
 	private final RentalRepository rentalRepository;
 	private final RentalMapper rentalMapper;
+	
 
-	public RentalServiceImpl(RentalRepository rentalRepository,
+	public RentalServiceImpl(UsersService usersService,
+			CarsService carsService,
+			RentalRepository rentalRepository,
 			RentalMapper rentalMapper) {
+		this.usersService = usersService;
+		this.carsService = carsService;
 		this.rentalRepository = rentalRepository;
 		this.rentalMapper = rentalMapper;
 	}
@@ -50,6 +61,10 @@ public class RentalServiceImpl implements RentalService {
 	@Override
 	public String createRental(RentalRequestDTO rentalDTO) {
 		RentalDoc rent = rentalMapper.mapToRentalDoc(rentalDTO);
+		CarDoc car = carsService.getCarDoc(rentalDTO.getCarId());
+		rent.setCar(car);
+		UserDoc user = usersService.getUserDoc(rentalDTO.getUserId());
+		rent.setUser(user);
 		try {
 			rent = rentalRepository.save(rent);
 			return rent.get_id();

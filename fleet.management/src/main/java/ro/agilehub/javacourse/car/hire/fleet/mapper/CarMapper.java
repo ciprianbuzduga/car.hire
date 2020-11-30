@@ -1,6 +1,5 @@
 package ro.agilehub.javacourse.car.hire.fleet.mapper;
 
-import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -8,9 +7,7 @@ import ro.agilehub.javacourse.car.hire.api.model.CarRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.CarResponseDTO;
 import ro.agilehub.javacourse.car.hire.fleet.document.CarDoc;
 
-@Mapper(unmappedTargetPolicy = org.mapstruct.ReportingPolicy.IGNORE,
-	componentModel = "spring")
-@DecoratedWith(CarMapperDecorator.class)
+@Mapper
 public interface CarMapper {
 
 	@Mapping(target = "status",
