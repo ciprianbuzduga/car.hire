@@ -5,7 +5,6 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerErrorException;
@@ -24,7 +23,7 @@ public class RentalController implements RentalsApi {
 
 	private final RentalService rentalService;
 
-	public RentalController(@Qualifier("rentalService") RentalService rentalService) {
+	public RentalController(RentalService rentalService) {
 		this.rentalService = rentalService;
 	}
 

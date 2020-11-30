@@ -7,7 +7,7 @@ import ro.agilehub.javacourse.car.hire.api.model.UserRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.UserResponseDTO;
 import ro.agilehub.javacourse.car.hire.user.document.UserDoc;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UserMapper {
 
 	@Mapping(target = "status", expression = "java(ro.agilehub.javacourse.car.hire.user.document.UserStatusEnum.ACTIVE)")

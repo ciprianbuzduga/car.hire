@@ -7,7 +7,7 @@ import ro.agilehub.javacourse.car.hire.api.model.CarRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.CarResponseDTO;
 import ro.agilehub.javacourse.car.hire.fleet.document.CarDoc;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CarMapper {
 
 	@Mapping(target = "status",

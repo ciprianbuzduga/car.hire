@@ -9,7 +9,8 @@ import ro.agilehub.javacourse.car.hire.fleet.mapper.CarMapper;
 import ro.agilehub.javacourse.car.hire.rental.document.RentalDoc;
 import ro.agilehub.javacourse.car.hire.user.mapper.UserMapper;
 
-@Mapper(uses = {RentalDateMapper.class, UserMapper.class, CarMapper.class})
+@Mapper(uses = {RentalDateMapper.class, UserMapper.class, CarMapper.class},
+		componentModel = "spring")
 public interface RentalMapper {
 
 	@Mapping(target = "status",
