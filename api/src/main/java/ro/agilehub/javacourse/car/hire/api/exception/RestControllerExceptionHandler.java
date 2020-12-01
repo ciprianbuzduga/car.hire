@@ -20,8 +20,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ServerErrorException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
-
 import ro.agilehub.javacourse.car.hire.api.model.ErrorDTO;
 import ro.agilehub.javacourse.car.hire.api.model.ValidationDTO;
 
