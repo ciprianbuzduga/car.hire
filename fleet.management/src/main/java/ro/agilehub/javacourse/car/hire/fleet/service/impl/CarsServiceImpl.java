@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
 import ro.agilehub.javacourse.car.hire.api.common.PatchMapper;
 import ro.agilehub.javacourse.car.hire.api.model.CarRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.CarResponseDTO;
@@ -21,19 +22,12 @@ import ro.agilehub.javacourse.car.hire.fleet.repository.MakeCarRepository;
 import ro.agilehub.javacourse.car.hire.fleet.service.CarsService;
 
 @Service
+@RequiredArgsConstructor
 public class CarsServiceImpl implements CarsService {
 
 	private final CarRepository carRepository;
 	private final MakeCarRepository makeCarRepository;
 	private final CarMapper carMapper;
-
-	public CarsServiceImpl(CarRepository carRepository,
-			MakeCarRepository makeCarRepository,
-			CarMapper carMapper) {
-		this.carRepository = carRepository;
-		this.makeCarRepository = makeCarRepository;
-		this.carMapper = carMapper;
-	}
 
 	@Override
 	public String addCar(CarRequestDTO carDTO) {

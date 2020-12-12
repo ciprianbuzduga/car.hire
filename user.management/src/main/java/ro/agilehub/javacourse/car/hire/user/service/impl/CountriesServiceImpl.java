@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
 import ro.agilehub.javacourse.car.hire.api.common.PatchMapper;
 import ro.agilehub.javacourse.car.hire.api.model.CountryRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.CountryResponseDTO;
@@ -16,16 +17,11 @@ import ro.agilehub.javacourse.car.hire.user.repository.CountryRepository;
 import ro.agilehub.javacourse.car.hire.user.service.CountriesService;
 
 @Service
+@RequiredArgsConstructor
 public class CountriesServiceImpl implements CountriesService {
 
 	private final CountryRepository repository;
 	private final CountryMapper countryMapper;
-
-	public CountriesServiceImpl(CountryRepository repository,
-			CountryMapper countryMapper) {
-		this.repository = repository;
-		this.countryMapper = countryMapper;
-	}
 
 	@Override
 	public String createCountry(CountryRequestDTO country) {

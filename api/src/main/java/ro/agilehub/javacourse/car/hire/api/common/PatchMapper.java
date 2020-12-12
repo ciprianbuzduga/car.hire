@@ -9,18 +9,16 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
+import lombok.RequiredArgsConstructor;
 import ro.agilehub.javacourse.car.hire.api.exception.PatchException;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument.OpEnum;
 
+@RequiredArgsConstructor
 public class PatchMapper {
 	private static final Pattern PATTERN_WORDS = Pattern.compile("/\\w+");
 
 	private final PatchHolder patchHolder;
-
-	private PatchMapper(PatchHolder patchHolder) {
-		this.patchHolder = patchHolder;
-	}
 
 	private static class PatchHolder {
 		final Class<?> ownerFields;

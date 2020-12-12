@@ -11,6 +11,7 @@ import org.springframework.web.server.ServerErrorException;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import lombok.RequiredArgsConstructor;
 import ro.agilehub.javacourse.car.hire.api.model.PageRentals;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.api.model.RentalRequestDTO;
@@ -19,13 +20,10 @@ import ro.agilehub.javacourse.car.hire.api.specification.RentalsApi;
 import ro.agilehub.javacourse.car.hire.rental.service.RentalService;
 
 @RestController
+@RequiredArgsConstructor
 public class RentalController implements RentalsApi {
 
 	private final RentalService rentalService;
-
-	public RentalController(RentalService rentalService) {
-		this.rentalService = rentalService;
-	}
 
 	@Override
 	public ResponseEntity<Void> deleteRental(String id) {

@@ -11,6 +11,7 @@ import org.springframework.web.server.ServerErrorException;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import lombok.RequiredArgsConstructor;
 import ro.agilehub.javacourse.car.hire.api.model.PageUsers;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.api.model.UserRequestDTO;
@@ -19,13 +20,10 @@ import ro.agilehub.javacourse.car.hire.api.specification.UsersApi;
 import ro.agilehub.javacourse.car.hire.user.service.UsersService;
 
 @RestController
+@RequiredArgsConstructor
 public class UsersController implements UsersApi {
 
 	private final UsersService usersService;
-
-	public UsersController(UsersService usersService) {
-		this.usersService = usersService;
-	}
 
 	@Override
 	public ResponseEntity<Void> createUser(@Valid UserRequestDTO userDTO) {

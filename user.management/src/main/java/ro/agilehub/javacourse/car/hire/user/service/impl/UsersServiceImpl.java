@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
 import ro.agilehub.javacourse.car.hire.api.common.PatchMapper;
 import ro.agilehub.javacourse.car.hire.api.model.PageUsers;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
@@ -19,16 +20,11 @@ import ro.agilehub.javacourse.car.hire.user.repository.UserRepository;
 import ro.agilehub.javacourse.car.hire.user.service.UsersService;
 
 @Service
+@RequiredArgsConstructor
 public class UsersServiceImpl implements UsersService {
 
 	private final UserRepository repository;
 	private final UserMapper userMapper;
-
-	public UsersServiceImpl(UserRepository repository,
-			UserMapper userMapper) {
-		this.repository = repository;
-		this.userMapper = userMapper;
-	}
 
 	@Override
 	public String addUser(UserRequestDTO userDTO) {

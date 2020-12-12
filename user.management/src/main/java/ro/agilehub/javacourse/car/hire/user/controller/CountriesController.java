@@ -10,6 +10,7 @@ import org.springframework.web.server.ServerErrorException;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import lombok.RequiredArgsConstructor;
 import ro.agilehub.javacourse.car.hire.api.model.CountryRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.CountryResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
@@ -17,13 +18,10 @@ import ro.agilehub.javacourse.car.hire.api.specification.CountriesApi;
 import ro.agilehub.javacourse.car.hire.user.service.CountriesService;
 
 @RestController
+@RequiredArgsConstructor
 public class CountriesController implements CountriesApi {
 
 	private final CountriesService countriesService;
-
-	public CountriesController(CountriesService countriesService) {
-		this.countriesService = countriesService;
-	}
 
 	@Override
 	public ResponseEntity<Void> createCountry(@Valid CountryRequestDTO countryDTO) {

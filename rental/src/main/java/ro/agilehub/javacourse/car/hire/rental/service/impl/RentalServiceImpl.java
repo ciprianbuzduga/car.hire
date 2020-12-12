@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
 import ro.agilehub.javacourse.car.hire.api.common.PatchMapper;
 import ro.agilehub.javacourse.car.hire.api.model.PageRentals;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
@@ -23,23 +24,13 @@ import ro.agilehub.javacourse.car.hire.user.document.UserDoc;
 import ro.agilehub.javacourse.car.hire.user.service.UsersService;
 
 @Service
+@RequiredArgsConstructor
 public class RentalServiceImpl implements RentalService {
 
 	private final UsersService usersService;
 	private final CarsService carsService;
 	private final RentalRepository rentalRepository;
 	private final RentalMapper rentalMapper;
-	
-
-	public RentalServiceImpl(UsersService usersService,
-			CarsService carsService,
-			RentalRepository rentalRepository,
-			RentalMapper rentalMapper) {
-		this.usersService = usersService;
-		this.carsService = carsService;
-		this.rentalRepository = rentalRepository;
-		this.rentalMapper = rentalMapper;
-	}
 
 	@Override
 	public boolean deleteRental(String id) {
