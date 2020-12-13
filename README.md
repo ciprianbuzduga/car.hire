@@ -8,3 +8,4 @@ In this course have been discussed the next topics:
 The 'why's and 'how's using Swagger, Spectral and openapi-generator-maven-plugin.
 4. Use MongoDB. Design Best Practices.
 5. Fun tools to use: Mapstruct, Lombok, Liquibase and others.
+6. Testing all layers. Units tests, application tests.
