@@ -3,6 +3,7 @@ package ro.agilehub.javacourse.car.hire.fleet.service.impl;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import ro.agilehub.javacourse.car.hire.api.common.PatchMapper;
+import ro.agilehub.javacourse.car.hire.api.exception.DuplicateKeyErrorCollection;
+import ro.agilehub.javacourse.car.hire.api.exception.EntityAlreadyExistsException;
 import ro.agilehub.javacourse.car.hire.api.model.CarRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.CarResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.model.PageCars;
@@ -31,6 +34,12 @@ public class CarsServiceImpl implements CarsService {
 
 	@Override
 	public String addCar(CarRequestDTO carDTO) {
+		String registrationNo = carDTO.getRegistrationNo();
+		long countCars = carRepository.countByRegistrationNo(registrationNo);
+		if(countCars > 0)
+			throw new EntityAlreadyExistsException(CarDoc.COLLECTION_NAME,
+					"registrationNo", registrationNo);
+
 		String make = carDTO.getMake();
 		MakeCarDoc makeDoc = makeCarRepository.findByName(make);
 		if(makeDoc == null)
@@ -40,6 +49,10 @@ public class CarsServiceImpl implements CarsService {
 		try {
 			carDoc = carRepository.save(carDoc);
 			return carDoc.get_id();
+		} catch (DuplicateKeyException e) {
+			String message = e.getCause().getMessage();
+			System.err.println("Unique index constraint violation: " + message);
+			throw new DuplicateKeyErrorCollection(message);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -87,8 +100,17 @@ public class CarsServiceImpl implements CarsService {
 
 	@Override
 	public boolean updateCar(String id, List<PatchDocument> patchDocuments) {
+		//TODO registrationNo validation
 		PatchMapper patchMapper = PatchMapper.getPatchMapper(patchDocuments, CarDoc.class);
-		return carRepository.updateDoc(CarDoc.class, id, patchMapper.getFieldValues());
+		boolean result = false;
+		try {
+			result = carRepository.updateDoc(CarDoc.class, id, patchMapper.getFieldValues());
+		} catch (DuplicateKeyException e) {
+			String message = e.getCause().getMessage();
+			System.err.println("Unique index constraint violation: " + message);
+			throw new DuplicateKeyErrorCollection(message);
+		}
+		return result;
 	}
 
 }

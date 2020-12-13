@@ -11,4 +11,7 @@ public interface CarRepository extends MongoRepository<CarDoc, String>,
 	DocumentPatchRepository<CarDoc, String> {
 
 	Page<CarDoc> findAllByStatus(String status, Pageable pageable);
+
+	long countByRegistrationNo(String registrationNo);
+
 }
