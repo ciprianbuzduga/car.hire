@@ -783,6 +783,7 @@ components:
           pattern: '^(.+)@(.+)$'
         username:
           type: string
+          minLength: 1
         firstName:
           type: string
         lastName:
@@ -791,6 +792,7 @@ components:
           type: string
         driverLicenseNo:
           type: string
+          minLength: 1
         title:
           type: string
       required:
@@ -806,6 +808,7 @@ components:
             password:
               type: string
               format: password
+              minLength: 5
           required:
             - password
 
