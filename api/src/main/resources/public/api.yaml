@@ -793,6 +793,10 @@ components:
           type: string
         title:
           type: string
+      required:
+        - email
+        - username
+        - driverLicenseNo
 
     UserRequestDTO:
       allOf:
@@ -802,6 +806,8 @@ components:
             password:
               type: string
               format: password
+          required:
+            - password
 
     UserStatusDTO:
       type: string
