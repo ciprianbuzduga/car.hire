@@ -831,8 +831,10 @@ components:
       properties:
         make:
           type: string
+          minLength: 1
         model:
           type: string
+          minLength: 1
         year:
           type: integer
           format: int32
@@ -843,6 +845,13 @@ components:
           type: string
         clazzCode:
           $ref: '#/components/schemas/CarClazzCodeDTO'
+        registrationNo:
+          type: string
+          minLength: 1
+      required:
+        - make
+        - model
+        - registrationNo
 
     CarClazzCodeDTO:
       type: string

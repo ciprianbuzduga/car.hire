@@ -1,6 +1,7 @@
 package ro.agilehub.javacourse.car.hire.fleet.document;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -30,4 +31,6 @@ public class CarDoc {
 
 	private CarStatusEnum status;
 
+	@Indexed(name = "car_registrationNo_idx_uq", unique = true)
+	private String registrationNo;
 }
