@@ -8,4 +8,7 @@ import ro.agilehub.javacourse.car.hire.user.document.UserDoc;
 public interface UserRepository extends MongoRepository<UserDoc, String>,
 	DocumentPatchRepository<UserDoc, String> {
 
+	long countByEmail(String emal);
+
+	long countByUsername(String username);
 }

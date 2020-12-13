@@ -82,6 +82,20 @@ public class RestControllerExceptionHandler extends ResponseEntityExceptionHandl
 		return createBadRequestEntity(CODE_BAD_REQUEST, error, ex.getField());
 	}
 
+	@ExceptionHandler(value = DuplicateKeyErrorCollection.class)
+	protected ResponseEntity<Object> handleDuplicateKeyErrorCollection(
+			DuplicateKeyErrorCollection ex, WebRequest request) {
+		String error = ex.getMessage();
+		return createBadRequestEntity(CODE_BAD_REQUEST, error, null);
+	}
+
+	@ExceptionHandler(value = EntityAlreadyExistsException.class)
+	protected ResponseEntity<Object> handleEntityAlreadyExistsException(
+			EntityAlreadyExistsException ex, WebRequest request) {
+		String error = ex.getMessage();
+		return createBadRequestEntity(CODE_BAD_REQUEST, error, null);
+	}
+
 	@Override
 	protected ResponseEntity<Object> handleConversionNotSupported(
 			ConversionNotSupportedException ex,
