@@ -1,6 +1,7 @@
 package ro.agilehub.javacourse.car.hire.user.document;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
@@ -16,8 +17,10 @@ public class UserDoc {
 
 	private String password;
 
+	@Indexed(name = "users_email_idx_uq", unique = true)
 	private String email;
 
+	@Indexed(name = "users_username_idx_uq", unique = true)
 	private String username;
 
 	private String firstName;
