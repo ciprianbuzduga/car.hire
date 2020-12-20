@@ -51,7 +51,7 @@ public class UsersServiceImpl implements UsersService {
 			String message = e.getCause().getMessage();
 			System.err.println("Unique index constraint violation: " + message);
 			throw new DuplicateKeyErrorCollection(message);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -63,7 +63,7 @@ public class UsersServiceImpl implements UsersService {
 		try {
 			repository.delete(user);
 			return true;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 		}
 		return false;
