@@ -1,6 +1,8 @@
 package ro.agilehub.javacourse.car.hire.api.exception;
 
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
+import static ro.agilehub.javacourse.car.hire.api.exception.DuplicateKeyErrorCollection.DUPLICATE_KEY_ERROR_CODE;
+import static ro.agilehub.javacourse.car.hire.api.exception.EntityAlreadyExistsException.ENTITY_ALREADY_EXISTS_CODE;
 
 import java.util.NoSuchElementException;
 
@@ -27,9 +29,9 @@ import ro.agilehub.javacourse.car.hire.api.model.ValidationDTO;
 @ControllerAdvice
 public class RestControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
-	protected static final String CODE_BAD_REQUEST = "BAD_REQUEST";
-	protected static final String INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
-	protected static final String RESOURCE_NOT_FOUND_ERROR = "RESOURCE_NOT_FOUND_ERROR";
+	public static final String CODE_BAD_REQUEST = "BAD_REQUEST";
+	public static final String INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
+	public static final String RESOURCE_NOT_FOUND_ERROR = "RESOURCE_NOT_FOUND_ERROR";
 
 	@Override
 	protected ResponseEntity<Object> handleMissingServletRequestParameter(
@@ -86,14 +88,14 @@ public class RestControllerExceptionHandler extends ResponseEntityExceptionHandl
 	protected ResponseEntity<Object> handleDuplicateKeyErrorCollection(
 			DuplicateKeyErrorCollection ex, WebRequest request) {
 		String error = ex.getMessage();
-		return createBadRequestEntity(CODE_BAD_REQUEST, error, null);
+		return createBadRequestEntity(DUPLICATE_KEY_ERROR_CODE, error, null);
 	}
 
 	@ExceptionHandler(value = EntityAlreadyExistsException.class)
 	protected ResponseEntity<Object> handleEntityAlreadyExistsException(
 			EntityAlreadyExistsException ex, WebRequest request) {
 		String error = ex.getMessage();
-		return createBadRequestEntity(CODE_BAD_REQUEST, error, null);
+		return createBadRequestEntity(ENTITY_ALREADY_EXISTS_CODE, error, ex.getField());
 	}
 
 	@Override
