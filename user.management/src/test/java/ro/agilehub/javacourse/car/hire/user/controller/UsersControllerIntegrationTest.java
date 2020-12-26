@@ -17,34 +17,26 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ro.agilehub.javacourse.car.hire.api.model.UserRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.UserResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.model.ValidationDTO;
+import ro.agilehub.javacourse.car.hire.user.MockMvcSetup;
 import ro.agilehub.javacourse.car.hire.user.document.UserDoc;
 
+@WithMockUser(roles = "MANAGER")
 @SpringBootTest
-@AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 @ActiveProfiles("integrationtest")
-public class UsersControllerIntegrationTest {
+public class UsersControllerIntegrationTest extends MockMvcSetup {
 
 	private static final String PATH_USERS = "/users";
-
-	@Autowired
-	private MockMvc mvc;
-
-	@Autowired
-	private ObjectMapper objectMapper;
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
