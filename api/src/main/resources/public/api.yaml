@@ -14,6 +14,12 @@ servers:
 tags:
   - name: sample
     description: Sample resource endpoint
+
+security:
+  - oAuth:
+      - write
+      - read
+
 paths:
   /users:
     get:
@@ -946,3 +952,14 @@ components:
           type: string
         message:
           type: string
+
+  securitySchemes:
+    oAuth:
+      type: oauth2
+      description: This API uses OAuth2 with the password flow
+      flows:
+        password:
+          tokenUrl: /oauth/token
+          scopes:
+            read: get information from the API
+            write: use the API to make changes to the supporting data model
