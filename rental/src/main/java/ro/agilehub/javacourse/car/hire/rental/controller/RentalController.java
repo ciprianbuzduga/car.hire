@@ -12,6 +12,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import lombok.RequiredArgsConstructor;
+import ro.agilehub.javacourse.car.hire.api.common.HasAnyAuthority;
 import ro.agilehub.javacourse.car.hire.api.model.PageRentals;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
 import ro.agilehub.javacourse.car.hire.api.model.RentalRequestDTO;
@@ -19,6 +20,7 @@ import ro.agilehub.javacourse.car.hire.api.model.RentalResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.specification.RentalsApi;
 import ro.agilehub.javacourse.car.hire.rental.service.RentalService;
 
+@HasAnyAuthority
 @RestController
 @RequiredArgsConstructor
 public class RentalController implements RentalsApi {

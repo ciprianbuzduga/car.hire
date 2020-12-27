@@ -6,12 +6,14 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerErrorException;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import lombok.RequiredArgsConstructor;
+import ro.agilehub.javacourse.car.hire.api.common.HasAnyAuthority;
 import ro.agilehub.javacourse.car.hire.api.model.CarRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.CarResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.model.PageCars;
@@ -25,6 +27,7 @@ public class CarsController implements CarsApi {
 
 	private final CarsService carsService;
 
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@Override
 	public ResponseEntity<Void> addCar(@Valid CarRequestDTO carDTO) {
 		String newId = carsService.addCar(carDTO);
@@ -38,6 +41,7 @@ public class CarsController implements CarsApi {
 					+ "unknown reasone", (Throwable)null);
 	}
 
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@Override
 	public ResponseEntity<Void> deleteCar(String id) {
 		boolean deleted = carsService.deleteCar(id);
@@ -48,12 +52,14 @@ public class CarsController implements CarsApi {
 					+ " because of unknown reasone", (Throwable)null);
 	}
 
+	@HasAnyAuthority
 	@Override
 	public ResponseEntity<CarResponseDTO> getCar(String id) {
 		CarResponseDTO car = carsService.getCar(id);
 		return ResponseEntity.ok(car);
 	}
 
+	@HasAnyAuthority
 	@Override
 	public ResponseEntity<PageCars> getCars(@Min(0) @Valid Integer page,
 			@Min(1) @Valid Integer size,
@@ -62,6 +68,7 @@ public class CarsController implements CarsApi {
 		return ResponseEntity.ok(pageCars);
 	}
 
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@Override
 	public ResponseEntity<Void> updateCar(String id,
 			@Valid List<PatchDocument> patchDocument) {
