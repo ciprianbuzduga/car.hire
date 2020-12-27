@@ -1,4 +1,4 @@
-package ro.agilehub.javacourse.car.hire.user;
+package ro.agilehub.javacourse.car.hire.base.test;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

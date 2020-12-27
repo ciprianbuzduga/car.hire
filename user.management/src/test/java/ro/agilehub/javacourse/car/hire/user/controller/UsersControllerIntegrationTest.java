@@ -23,7 +23,7 @@ import ro.agilehub.javacourse.car.hire.api.model.UserRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.UserResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.model.UserStatusDTO;
 import ro.agilehub.javacourse.car.hire.api.model.ValidationDTO;
-import ro.agilehub.javacourse.car.hire.user.MockMvcIntegrationMongoSetup;
+import ro.agilehub.javacourse.car.hire.base.test.MockMvcIntegrationMongoSetup;
 import ro.agilehub.javacourse.car.hire.user.document.UserDoc;
 
 @WithMockUser(roles = "MANAGER")

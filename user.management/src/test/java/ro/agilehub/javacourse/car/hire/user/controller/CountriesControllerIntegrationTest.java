@@ -28,7 +28,7 @@ import ro.agilehub.javacourse.car.hire.api.model.CountryRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.CountryResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.model.CountryStatusDTO;
 import ro.agilehub.javacourse.car.hire.api.model.ValidationDTO;
-import ro.agilehub.javacourse.car.hire.user.MockMvcIntegrationMongoSetup;
+import ro.agilehub.javacourse.car.hire.base.test.MockMvcIntegrationMongoSetup;
 import ro.agilehub.javacourse.car.hire.user.document.CountryDoc;
 
 @WithMockUser(roles = "ADMIN")

@@ -4,6 +4,7 @@
 /fleet.management/target/
 /rental/target/
 /user.management/target/
+/base.test/target/
 /.settings
 /.project
 /api/.settings
@@ -27,3 +28,6 @@
 /user.management/.settings
 /user.management/.classpath
 /user.management/.project
+/base.test/.settings
+/base.test/.classpath
+/base.test/.project

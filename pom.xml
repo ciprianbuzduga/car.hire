@@ -23,6 +23,7 @@
         <module>boot</module>
         <module>car.documents</module>
         <module>car.repository</module>
+        <module>base.test</module>
     </modules>
 
     <properties>

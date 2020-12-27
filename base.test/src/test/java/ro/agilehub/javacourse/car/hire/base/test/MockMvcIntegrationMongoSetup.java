@@ -1,4 +1,4 @@
-package ro.agilehub.javacourse.car.hire.user;
+package ro.agilehub.javacourse.car.hire.base.test;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
