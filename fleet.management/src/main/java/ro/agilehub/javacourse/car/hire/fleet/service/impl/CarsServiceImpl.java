@@ -53,7 +53,7 @@ public class CarsServiceImpl implements CarsService {
 			String message = e.getCause().getMessage();
 			System.err.println("Unique index constraint violation: " + message);
 			throw new DuplicateKeyErrorCollection(message);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -65,7 +65,7 @@ public class CarsServiceImpl implements CarsService {
 		try {
 			carRepository.delete(car);
 			return true;
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 		}
 		return false;
