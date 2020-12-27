@@ -3,6 +3,7 @@ package ro.agilehub.javacourse.car.hire.boot.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 import java.util.Collection;
 
@@ -90,7 +92,11 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
                 // it also means you'll have to have the property below specified, as it's manadatory
                 // under the latest Spring Security version to have a jwks URI configured
                 // spring.security.oauth2.resourceserver.jwt.jwk-set-uri
-                .jwt(jwt -> jwt.jwtAuthenticationConverter(getJwtAuthenticationConverter()));
+                .jwt(jwt -> jwt.jwtAuthenticationConverter(getJwtAuthenticationConverter()))
+                //default spring responses with 403 when you access unauthorized a resource
+                .and()
+                .exceptionHandling().authenticationEntryPoint(
+                		new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
     }
 
     private Converter<Jwt, AbstractAuthenticationToken> getJwtAuthenticationConverter() {
