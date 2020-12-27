@@ -11,14 +11,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ro.agilehub.javacourse.car.hire.api.exception.EntityAlreadyExistsException.ENTITY_ALREADY_EXISTS_CODE;
 
-import java.net.URL;
-
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -26,20 +21,18 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import ro.agilehub.javacourse.car.hire.api.model.UserRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.UserResponseDTO;
+import ro.agilehub.javacourse.car.hire.api.model.UserStatusDTO;
 import ro.agilehub.javacourse.car.hire.api.model.ValidationDTO;
-import ro.agilehub.javacourse.car.hire.user.MockMvcSetup;
+import ro.agilehub.javacourse.car.hire.user.MockMvcIntegrationMongoSetup;
 import ro.agilehub.javacourse.car.hire.user.document.UserDoc;
 
 @WithMockUser(roles = "MANAGER")
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @ActiveProfiles("integrationtest")
-public class UsersControllerIntegrationTest extends MockMvcSetup {
+public class UsersControllerIntegrationTest extends MockMvcIntegrationMongoSetup {
 
 	private static final String PATH_USERS = "/users";
-
-	@Autowired
-	private MongoTemplate mongoTemplate;
 
 	@Test
 	public void test_addUserOk() throws Exception {
@@ -54,8 +47,7 @@ public class UsersControllerIntegrationTest extends MockMvcSetup {
 		assertNotNull(headerLocationId);
 		assertNotEquals("", headerLocationId);
 		
-		URL url = new URL(headerLocationId);
-		String path = url.getPath();
+		String path = getPath(headerLocationId);
 
 		mvcResult = mvc.perform(get(path))
 			.andExpect(status().isOk())
@@ -71,6 +63,7 @@ public class UsersControllerIntegrationTest extends MockMvcSetup {
 		assertEquals(newUser.getLastName(), savedUser.getLastName());
 		assertEquals(newUser.getTitle(), savedUser.getTitle());
 		assertEquals(newUser.getUsername(), savedUser.getUsername());
+		assertEquals(UserStatusDTO.ACTIVE, savedUser.getStatus());
 	}
 
 	@Test
@@ -139,8 +132,7 @@ public class UsersControllerIntegrationTest extends MockMvcSetup {
 				.andExpect(status().isCreated()).andReturn();
 
 		String headerLocationId = mvcResult.getResponse().getHeader(LOCATION);
-		URL url = new URL(headerLocationId);
-		String path = url.getPath();
+		String path = getPath(headerLocationId);
 
 		mvcResult = mvc.perform(delete(path))
 			.andExpect(status().isNoContent())
@@ -164,8 +156,8 @@ public class UsersControllerIntegrationTest extends MockMvcSetup {
 		return newUser;
 	}
 
-	@After
-	public void cleanCollections() {
-		mongoTemplate.dropCollection(UserDoc.COLLECTION_NAME);
+	@Override
+	protected String[] getDroppedCollections() {
+		return new String[] { UserDoc.COLLECTION_NAME };
 	}
 }

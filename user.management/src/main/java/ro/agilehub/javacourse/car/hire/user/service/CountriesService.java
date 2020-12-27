@@ -5,6 +5,7 @@ import java.util.List;
 import ro.agilehub.javacourse.car.hire.api.model.CountryRequestDTO;
 import ro.agilehub.javacourse.car.hire.api.model.CountryResponseDTO;
 import ro.agilehub.javacourse.car.hire.api.model.PatchDocument;
+import ro.agilehub.javacourse.car.hire.user.document.CountryDoc;
 
 public interface CountriesService {
 
@@ -18,4 +19,5 @@ public interface CountriesService {
 
 	boolean updateCountry(String id, List<PatchDocument> patchDocuments);
 
+	CountryDoc getCountryDoc(String id);
 }

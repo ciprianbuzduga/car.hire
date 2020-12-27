@@ -8,4 +8,8 @@ import ro.agilehub.javacourse.car.hire.user.document.CountryDoc;
 public interface CountryRepository extends MongoRepository<CountryDoc, String>,
 	DocumentPatchRepository<CountryDoc, String> {
 
+	long countByIsoCodeIgnoreCase(String isoCode);
+
+	long countByNameIgnoreCase(String name);
+
 }

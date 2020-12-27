@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerErrorException;
 import org.springframework.web.util.UriComponents;
@@ -19,6 +20,7 @@ import ro.agilehub.javacourse.car.hire.user.service.CountriesService;
 
 @RestController
 @RequiredArgsConstructor
+@PreAuthorize("hasAuthority('ADMIN')")
 public class CountriesController implements CountriesApi {
 
 	private final CountriesService countriesService;

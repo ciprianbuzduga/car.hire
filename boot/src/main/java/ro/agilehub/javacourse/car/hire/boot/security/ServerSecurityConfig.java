@@ -44,7 +44,11 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .withUser("jack")
                 .password("$2a$10$pjcUbYQPlRDqcL35cHevqe5f3iJLwazLgcPYn33PwXKfh9aK.l6ee")
-                .authorities(new SimpleGrantedAuthority("MANAGER"));
+                .authorities(new SimpleGrantedAuthority("MANAGER"))
+                .and()
+                .withUser("daniel")
+                .password("$2a$10$pjcUbYQPlRDqcL35cHevqe5f3iJLwazLgcPYn33PwXKfh9aK.l6ee")
+                .authorities(new SimpleGrantedAuthority("ADMIN"));
     }
 
     /**

@@ -918,8 +918,13 @@ components:
       properties:
         name:
           type: string
+          minLength: 2
         isoCode:
           type: string
+          minLength: 2
+      required:
+        - name
+        - isoCode
 
     CountryStatusDTO:
       type: string
@@ -963,3 +968,4 @@ components:
           scopes:
             read: get information from the API
             write: use the API to make changes to the supporting data model
+
