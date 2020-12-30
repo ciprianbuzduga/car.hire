@@ -7,7 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 
-public class MongoAuditingAware implements AuditorAware<String> {
+public class JwtAuditorAware implements AuditorAware<String> {
 
 	@Override
 	public Optional<String> getCurrentAuditor() {

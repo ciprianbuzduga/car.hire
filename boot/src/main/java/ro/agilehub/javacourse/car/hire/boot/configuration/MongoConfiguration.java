@@ -8,7 +8,7 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 
-import ro.agilehub.javacourse.car.hire.boot.auditing.MongoAuditingAware;
+import ro.agilehub.javacourse.car.hire.boot.auditing.JwtAuditorAware;
 import ro.agilehub.javacourse.car.hire.converter.CarClazzConverter;
 import ro.agilehub.javacourse.car.hire.converter.CarStatusConverter;
 import ro.agilehub.javacourse.car.hire.converter.CountryStatusConverter;
@@ -27,7 +27,7 @@ public class MongoConfiguration {
 
 	@Bean
 	public AuditorAware<String> mongoAuditingAware() {
-		return new MongoAuditingAware();
+		return new JwtAuditorAware();
 	}
 
 }
