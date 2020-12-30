@@ -25,7 +25,7 @@ import java.util.Collection;
  * This is the base class for configuring security related information for your application
  */
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
