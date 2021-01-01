@@ -31,7 +31,7 @@ import ro.agilehub.javacourse.car.hire.api.model.ValidationDTO;
 import ro.agilehub.javacourse.car.hire.base.test.MockMvcIntegrationMongoSetup;
 import ro.agilehub.javacourse.car.hire.user.document.CountryDoc;
 
-@WithMockUser(roles = "ADMIN")
+@WithMockUser(authorities = "ADMIN")
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @ActiveProfiles("integrationtest")

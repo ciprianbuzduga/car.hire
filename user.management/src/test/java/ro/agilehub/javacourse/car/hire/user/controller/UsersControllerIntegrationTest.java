@@ -26,13 +26,11 @@ import ro.agilehub.javacourse.car.hire.api.model.ValidationDTO;
 import ro.agilehub.javacourse.car.hire.base.test.MockMvcIntegrationMongoSetup;
 import ro.agilehub.javacourse.car.hire.user.document.UserDoc;
 
-@WithMockUser(roles = "MANAGER")
+@WithMockUser(authorities = "MANAGER")
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @ActiveProfiles("integrationtest")
 public class UsersControllerIntegrationTest extends MockMvcIntegrationMongoSetup {
-
-	private static final String PATH_USERS = "/users";
 
 	@Test
 	public void test_addUserOk() throws Exception {

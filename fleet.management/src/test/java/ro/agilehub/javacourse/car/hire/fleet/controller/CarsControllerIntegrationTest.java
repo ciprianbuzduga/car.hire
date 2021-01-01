@@ -113,7 +113,7 @@ public class CarsControllerIntegrationTest extends MockMvcIntegrationMongoSetup 
 				.andReturn();
 	}
 
-	@WithMockUser(roles = "ADMIN")
+	@WithMockUser(authorities = "ADMIN")
 	@Test
 	public void test_deleteCar_whenNotFound() throws Exception {
 		String transientId = "1";
