@@ -18,10 +18,16 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class MockMvcSetup {
+	protected static final String PATH_USERS = "/users";
 	protected static final String PATH_CARS = "/cars";
+	protected static final String PATH_RENTALS = "/rentals";
 
 	protected static final SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor ADMIN =
 			user("jack").authorities(new SimpleGrantedAuthority("ADMIN"));
+	protected static final SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor MANAGER =
+			user("john").authorities(new SimpleGrantedAuthority("MANAGER"));
+	protected static final SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor CUSTOMER =
+			user("daniel").authorities(new SimpleGrantedAuthority("CUSTOMER"));
 
     protected MockMvc mvc;
     

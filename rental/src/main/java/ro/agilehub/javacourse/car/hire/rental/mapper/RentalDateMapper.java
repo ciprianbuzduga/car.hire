@@ -2,7 +2,7 @@ package ro.agilehub.javacourse.car.hire.rental.mapper;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 
 import org.mapstruct.Mapper;
 
@@ -18,6 +18,6 @@ public interface RentalDateMapper {
 	default OffsetDateTime toOffsetDateTime(LocalDateTime date) {
 		if(date == null)
 			return null;
-		return OffsetDateTime.of(date, ZoneOffset.UTC);
+		return date.atZone(ZoneId.systemDefault()).toOffsetDateTime();
 	}
 }

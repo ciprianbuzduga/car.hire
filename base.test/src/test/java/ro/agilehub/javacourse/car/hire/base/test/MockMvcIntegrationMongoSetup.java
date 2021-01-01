@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 public abstract class MockMvcIntegrationMongoSetup extends MockMvcSetup {
 
     @Autowired
-	private MongoTemplate mongoTemplate;
+	protected MongoTemplate mongoTemplate;
 
     @After
 	public void cleanCollections() {

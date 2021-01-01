@@ -16,10 +16,11 @@ import lombok.EqualsAndHashCode;
 import ro.agilehub.javacourse.car.hire.fleet.document.CarDoc;
 import ro.agilehub.javacourse.car.hire.user.document.UserDoc;
 
-@Document(value = "rental")
+@Document(value = RentalDoc.COLLECTION_NAME)
 @Data
 @EqualsAndHashCode(of = "_id")
 public class RentalDoc {
+	public static final String COLLECTION_NAME = "rental";
 
 	@Id
 	private String _id;
