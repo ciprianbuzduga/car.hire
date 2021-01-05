@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerErrorException;
 import org.springframework.web.util.UriComponents;
@@ -27,6 +28,7 @@ public class RentalController implements RentalsApi {
 
 	private final RentalService rentalService;
 
+	@PreAuthorize("hasPermission(#id, 'RentalDoc', 'READ')")
 	@Override
 	public ResponseEntity<Void> deleteRental(String id) {
 		boolean deleted = rentalService.deleteRental(id);
