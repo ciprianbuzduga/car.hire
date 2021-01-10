@@ -11,9 +11,6 @@ servers:
     variables:
       port:
         default: '8080'
-tags:
-  - name: sample
-    description: Sample resource endpoint
 
 security:
   - oAuth:
@@ -325,173 +322,6 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /rentals:
-    post:
-      tags:
-        - rental
-      summary: Create a reservation
-      description: Create a reservation
-      operationId: createRental
-      requestBody:
-        description: Payload of rental
-        required : true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RentalRequestDTO'
-      responses:
-        '201':
-          description: A new rental was added with success
-          headers:
-            'Location':
-              $ref: '#/components/headers/RentalLocation'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-    get:
-      tags:
-        - rental
-      summary: Return a paginated list with the rentals
-      description: Return a paginated list with the rentals
-      operationId: getRentals
-      parameters:
-        - in: query
-          name: page
-          schema:
-            type: integer
-            minimum: 0
-            default: 0
-          description: The number of page used in pagination
-          required: false
-        - in: query
-          name: size
-          schema:
-            type: integer
-            minimum: 1
-            default: 20
-          required: false
-          description: The number of rentals retrived from current page
-        - in: query
-          name: sort
-          schema:
-            type: string
-            default: 'startDate,desc'
-          required: false  
-          description: A pair consists from property name and type of sorting splits by a comma
-        - in: query
-          name: userId
-          schema:
-            type: string
-          required: false  
-          description: A value to filter rentals by user id
-        - in: query
-          name: carId
-          schema:
-            type: string
-          required: false  
-          description: A value to filter rentals by car id
-        - in: query
-          name: status
-          schema:
-            type: string
-          required: false  
-          description: A value to filter rentals by status
-      responses:
-        '200':
-          $ref: '#/components/responses/PageRentals'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-  /rentals/{id}:
-    get:
-      tags:
-        - rental
-      summary: Return a reservation by id.
-      description: Return a reservation by id. The id is a string.
-      operationId: getRental
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          description: The id of rental
-          required: true
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/RentalResponseDTO'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/ResourceNotFoundError'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-    delete:
-      tags:
-        - rental
-      summary: Delete a rental by id
-      description: Delete a rental by id. The id is a string.
-      operationId: deleteRental
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          description: The id of rental
-          required: true
-      responses:
-        '204':
-          description: Cancel a rental with success
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/ResourceNotFoundError'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
-    patch:
-      tags:
-        - rental
-      summary: Update a reservation
-      description: Update a reservation’s details using a PATCH request
-      operationId: updateRental
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          description: The id of rental
-          required: true
-      requestBody:
-        $ref: '#/components/requestBodies/PatchBody'
-      responses:
-        '204':
-          description: Update a rental with success
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/ResourceNotFoundError'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
   /countries:
     post:
       tags:
@@ -580,7 +410,7 @@ paths:
           required: true
       responses:
         '204':
-          description: Cancel a rental with success
+          description: Delete a country with success
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -663,13 +493,6 @@ components:
           schema:
             $ref: '#/components/schemas/PageCars'
 
-    PageRentals:
-      description: A page with rentals retrived from getRentals call
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/PageRentals'
-
     ListCountries:
       description: A list of countries retrived from getCountries call
       content:
@@ -689,11 +512,6 @@ components:
       schema:
         type: string
       description: The url for access a car by id
-
-    RentalLocation:
-      schema:
-        type: string
-      description: The url for access a rental by id
 
     CountryLocation:
       schema:
@@ -769,16 +587,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/CarResponseDTO'
-
-    PageRentals:
-      allOf:
-        - $ref: '#/components/schemas/PageRecords'
-        - type: object
-          properties:
-            rentals:
-              type: array
-              items:
-                $ref: '#/components/schemas/RentalResponseDTO'
 
     UserDTO:
       type: object
@@ -876,42 +684,6 @@ components:
               type: string
             status:
               $ref: '#/components/schemas/CarStatusDTO'
-
-    RentalRequestDTO:
-      type: object
-      properties:
-        userId:
-          type: string
-        carId:
-          type: string
-        startDate:
-          type: string
-          format: date-time
-        endDate:
-          type: string
-          format: date-time
-
-    RentalStatusDTO:
-      type: string
-      enum: [ACTIVE, CANCELLED]
-
-    RentalResponseDTO:
-      type: object
-      properties:
-        id:
-          type: string
-        user:
-          $ref: '#/components/schemas/UserResponseDTO'
-        car:
-          $ref: '#/components/schemas/CarResponseDTO'
-        startDate:
-          type: string
-          format: date-time
-        endDate:
-          type: string
-          format: date-time
-        status:
-          $ref: '#/components/schemas/RentalStatusDTO'
 
     CountryRequestDTO:
       type: object

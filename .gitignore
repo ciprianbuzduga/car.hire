@@ -2,7 +2,6 @@
 /api/target/
 /boot/target/
 /fleet.management/target/
-/rental/target/
 /user.management/target/
 /base.test/target/
 /.settings
@@ -22,9 +21,6 @@
 /fleet.management/.settings
 /fleet.management/.classpath
 /fleet.management/.project
-/rental/.settings
-/rental/.classpath
-/rental/.project
 /user.management/.settings
 /user.management/.classpath
 /user.management/.project

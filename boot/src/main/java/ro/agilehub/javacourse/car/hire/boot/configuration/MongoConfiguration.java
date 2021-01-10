@@ -12,7 +12,6 @@ import ro.agilehub.javacourse.car.hire.boot.auditing.JwtAuditorAware;
 import ro.agilehub.javacourse.car.hire.converter.CarClazzConverter;
 import ro.agilehub.javacourse.car.hire.converter.CarStatusConverter;
 import ro.agilehub.javacourse.car.hire.converter.CountryStatusConverter;
-import ro.agilehub.javacourse.car.hire.converter.RentalStatusConverter;
 
 @Configuration
 @EnableMongoAuditing
@@ -21,8 +20,7 @@ public class MongoConfiguration {
 	@Bean
 	public MongoCustomConversions customConversions() {
 		return new MongoCustomConversions(List.of(CarClazzConverter.INSTANCE,
-				CarStatusConverter.INSTANCE, CountryStatusConverter.INSTANCE,
-				RentalStatusConverter.INSTANCE));
+				CarStatusConverter.INSTANCE, CountryStatusConverter.INSTANCE));
 	}
 
 	@Bean
